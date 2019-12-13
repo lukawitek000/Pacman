@@ -50,9 +50,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = Pacman.cpp \
+SOURCES       = gameboard.cpp \
+		Pacman.cpp \
 		Player.cpp moc_gameboard.cpp
-OBJECTS       = Pacman.o \
+OBJECTS       = gameboard.o \
+		Pacman.o \
 		Player.o \
 		moc_gameboard.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -128,8 +130,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		pacman.pro gameboard.h \
-		Player.h Pacman.cpp \
+		pacman.pro Figure.h \
+		gameboard.h \
+		Player.h \
+		snack.h \
+		Wall.h gameboard.cpp \
+		Pacman.cpp \
 		Player.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
@@ -312,8 +318,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents gameboard.h Player.h $(DISTDIR)/
-	$(COPY_FILE) --parents Pacman.cpp Player.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Figure.h gameboard.h Player.h snack.h Wall.h $(DISTDIR)/
+	$(COPY_FILE) --parents gameboard.cpp Pacman.cpp Player.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -350,6 +356,7 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_gameboard.cpp
 moc_gameboard.cpp: Player.h \
 		Wall.h \
+		snack.h \
 		gameboard.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -369,12 +376,22 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
+gameboard.o: gameboard.cpp gameboard.h \
+		Player.h \
+		Wall.h \
+		snack.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameboard.o gameboard.cpp
+
 Pacman.o: Pacman.cpp gameboard.h \
 		Player.h \
-		Wall.h
+		Wall.h \
+		snack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o Pacman.cpp
 
-Player.o: Player.cpp Player.h
+Player.o: Player.cpp gameboard.h \
+		Player.h \
+		Wall.h \
+		snack.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Player.o Player.cpp
 
 moc_gameboard.o: moc_gameboard.cpp 

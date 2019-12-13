@@ -9,10 +9,10 @@
 #include <QPainter>
 #include <QVector>
 
-class GameBoard;
+//class GameBoard;
 #include "Player.h"
 #include "Wall.h"
-
+#include "snack.h"
 
 
 
@@ -23,15 +23,16 @@ class GameBoard : public QWidget{
 private:
 	Player *player;
 	QVector<Wall*> walls;
+	QVector<Snack*> snacks;
 	int w;
 	int h;
-	static int boardTable[30][30];
+	
 	
 	
 public:
+	int boardTable[30][30];
 	
-	
-	GameBoard(QWidget *parent = 0): QWidget(parent){
+	GameBoard(QWidget *parent  = 0);/*: QWidget(parent){
 		
 		this-> resize(900, 900);
 		int w = width() / 30;
@@ -85,18 +86,22 @@ public:
 	
 	static int getBoardTableValueAt(int x, int y){
 		return boardTable[x][y];
-	};
+	};*/
 protected:
 	
 	void paintEvent(QPaintEvent* /*event*/){
 		QPainter painter(this);
 		QRect background(0, 0, w*30, h*30);
-		painter.setPen(Qt::NoPen);
-		painter.setBrush(Qt::black);
-		painter.drawRect(background);
+		//painter.setPen(Qt::NoPen);
+		//painter.setBrush(Qt::black);
+		//painter.drawRect(background);
+		painter.fillRect(background, Qt::black);
 		player->paintPlayer(painter);
 		for(int i = 0; i<walls.size(); i++){
 			walls[i]->paintWall(painter);
+		}
+		for(int i = 0; i<snacks.size(); i++){
+			snacks[i]->paintSnack(painter);
 		}
 		
 		
@@ -111,14 +116,15 @@ protected:
 		
 	};
 	
-	void keyPressEvent(QKeyEvent *event){
+	void keyPressEvent(QKeyEvent *event);
+	/*{
 		//std::cout << "keyerevent" << std::endl;
-		player->move(event);
+		player->move(event, boardTable);
 		update();
 		
 	};
 	
-	
+	*/
 	
 	
 };

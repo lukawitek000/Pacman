@@ -11,7 +11,6 @@ public:
 	Wall(int x, int y, int sizeX, int sizeY , QWidget * parent=0): QWidget(parent){
 		wallRect = QRect(x, y, sizeX, sizeY);
 		
-		
 	};
 	
 	

@@ -11,9 +11,22 @@
 #include <QString>
 #include <QTransform>
 
+#include <QElapsedTimer>
+
 //#include "gameboard.h"
 
 //class Gameboard;
+enum direction{
+	RIGHT,
+	LEFT,
+	UP,
+	DOWN
+};
+
+
+
+
+
 
 
 class Player : public QWidget{
@@ -31,13 +44,14 @@ public:
 	QImage imageOfPlayer;
 	QImage pacmanOpened;// = new QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 	QImage pacmanClosed;
-	
+	enum direction dir;
 	
 	
 	
 	
 	
 	Player(int x, int y){
+		dir = RIGHT;
 		position = QPoint(x, y);
 		pacmanOpened = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		pacmanClosed = QImage(QString("%1/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
@@ -55,43 +69,120 @@ public:
 		painter.setPen(Qt::NoPen);
 		painter.setBrush(Qt::black);
 		//painter.drawRect(playerRect);
+		
 		painter.drawImage(playerRect, imageOfPlayer);
-		//std::cout << "painterevent" << std::endl;
+	//	std::cout << "painterevent" << std::endl;
 		
 	};
 	
-	void move(QKeyEvent *event){
+	/*
+	void moving(int boardTable[30][30]){
+		bool con = true;
+		int step;
+		QElapsedTimer timer;
+		timer.start();
+		do{
+		step = 5;
+		if(dir == RIGHT){
+			if(canMoveRight(boardTable)){
+				position.setX(position.x() + step);
+				con = true;
+			}else{
+				con = false;
+			}
+		}else if(dir == LEFT){
+			if(canMoveLeft(boardTable)){
+				position.setX(position.x() - step);
+				con = true;
+			}else{
+				con = false;
+			}
+		}else if(dir == DOWN){
+			if(canMoveDown(boardTable)){
+				position.setY(position.y() + step);
+				con = true;
+			}else{
+				con = false;
+			}
+		}else if(dir == UP){
+			if(canMoveUp(boardTable)){
+				position.setY(position.y() - step);
+				con = true;
+			}else{
+				con = false;
+			}
+		}
+		
+		playerRect.moveTo(position);
+		std::cout << "MMOVINGGGG" << std::endl;
+		if(timer.restart() > 100){
+			update();
+			repaint();
+		}
+		//QThread::msleep(10);
+		}while(con);
+	};
+	
+	*/
+	
+	
+	void move(QKeyEvent *event, int boardTable[30][30]){
 		int step = 5;
 		QTransform trans;
 		//trans.rotate(180);
 		imageOfPlayer = imageOfPlayer.transformed(trans);
 		//std::cout << "inside move +++++++++++++++++++ " << std::endl;
 		if(event->key() == Qt::Key_Down){
-			//std::cout << "inside the key press down " << std::endl;
 			imageOfPlayer = pacmanOpened;
 			trans.rotate(90);
 			imageOfPlayer = imageOfPlayer.transformed(trans);
-			position.setY(position.y() + step);
+			
+			if(canMoveDown(boardTable)){
+				//std::cout << "inside the key press down " << std::endl;
+				//dir = DOWN;
+				position.setY(position.y() + step);
+			}
 		}
 		if(event->key() == Qt::Key_Up){
-			//std::cout << "inside the key press up " << std::endl;
 			imageOfPlayer = pacmanOpened;
 			trans.rotate(270);
 			imageOfPlayer = imageOfPlayer.transformed(trans);
-			position.setY(position.y() - step);
+			if(canMoveUp(boardTable)){
+			//std::cout << "inside the key press up " << std::endl;
+			//	dir = UP;
+				position.setY(position.y() - step);
+			}
 		}
-		if(event->key() == Qt::Key_Right && canMoveRight(step)){
-			//std::cout << "inside the key press right " << std::endl;
+		if(event->key() == Qt::Key_Right){
 			imageOfPlayer = pacmanOpened;
-			position.setX(position.x() + step);
+			if(canMoveRight(boardTable)){
+			//std::cout << "inside the key press right " << std::endl;
+				//dir = RIGHT;
+				position.setX(position.x() + step);
+			}
 		}
 		if(event->key() == Qt::Key_Left){
-			//std::cout << "inside the key press left " << std::endl;
 			imageOfPlayer = pacmanOpened;
-			position.setX(position.x() - step);
 			trans.rotate(180);
 			imageOfPlayer = imageOfPlayer.transformed(trans);
+			if(canMoveLeft(boardTable)){
+				//std::cout << "inside the key press left " << std::endl;
+				//dir = LEFT;
+				position.setX(position.x() - step);
+			}
 		}
+		
+		//moving(boardTable);
+		/*
+		if(dir == RIGHT){
+			position.setX(position.x() + step);
+		}else if(dir == LEFT){
+			position.setX(position.x() - step);
+		}else if(dir == DOWN){
+			position.setY(position.y() + step);
+		}else if(dir == UP){
+			position.setY(position.y() - step);
+		}*/
 		playerRect.moveTo(position);
 		
 		
@@ -100,7 +191,7 @@ public:
 	};
 	
 	
-	bool canMoveRight(int step);
+	bool canMoveRight(int boardTable[30][30]);
 	/*{
 		std::cout << "canMoveRight" << Gameboard::getBoardTableValueAt(position.x()+step, position.y())  << std::endl;
 		//if(Gameboard::getBoardTableValueAt(position.x()+step, position.y()) == 1)
@@ -109,6 +200,12 @@ public:
 		
 	};
 	*/
+	
+	bool canMoveLeft(int boardTable[30][30]);
+	
+	bool canMoveUp(int boardTable[30][30]);
+	bool canMoveDown(int boardTable[30][30]);
+	
 	
 	
 	
