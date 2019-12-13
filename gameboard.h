@@ -9,7 +9,7 @@
 #include <QPainter>
 #include <QVector>
 
-
+class GameBoard;
 #include "Player.h"
 #include "Wall.h"
 
@@ -25,12 +25,24 @@ private:
 	QVector<Wall*> walls;
 	int w;
 	int h;
+	static int boardTable[30][30];
+	
+	
 public:
+	
+	
 	GameBoard(QWidget *parent = 0): QWidget(parent){
 		
 		this-> resize(900, 900);
 		int w = width() / 30;
 		int h = height() / 30;
+		
+		for(int i=0; i<30; i++){
+			for(int j=0; j<30; j++){
+				boardTable[i][j] = 0;
+			}
+		}
+		
 		
 		
 		player = new Player(w, h);
@@ -39,6 +51,10 @@ public:
 		
 	//	player->paint();
 		//update();
+		
+		
+		
+		
 		
 		
 	//	QColor color;
@@ -50,6 +66,7 @@ public:
 					gridLayout->addWidget(player, y, x);
 					std::cout << "player add " << std::endl;
 				}else if(board.pixel(x, y) == qRgb(0,0,0)){
+					boardTable[x][y] = 1;
 					Wall * wall = new Wall(x*w, y*h, w, h);
 					walls.push_back(wall);
 					gridLayout -> addWidget(walls[walls.size()-1], y, x);
@@ -66,7 +83,9 @@ public:
 		//this->setStyleSheet("background-color:black;");
 	};
 	
-	
+	static int getBoardTableValueAt(int x, int y){
+		return boardTable[x][y];
+	};
 protected:
 	
 	void paintEvent(QPaintEvent* /*event*/){
@@ -98,11 +117,6 @@ protected:
 		update();
 		
 	};
-	
-//private:
-	//QImage board;
-	
-	
 	
 	
 	

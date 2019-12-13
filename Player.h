@@ -11,6 +11,10 @@
 #include <QString>
 #include <QTransform>
 
+//#include "gameboard.h"
+
+//class Gameboard;
+
 
 class Player : public QWidget{
 private:
@@ -59,20 +63,24 @@ public:
 	void move(QKeyEvent *event){
 		int step = 5;
 		QTransform trans;
-		trans.rotate(180);
+		//trans.rotate(180);
 		imageOfPlayer = imageOfPlayer.transformed(trans);
 		//std::cout << "inside move +++++++++++++++++++ " << std::endl;
 		if(event->key() == Qt::Key_Down){
 			//std::cout << "inside the key press down " << std::endl;
-			imageOfPlayer = pacmanClosed;
+			imageOfPlayer = pacmanOpened;
+			trans.rotate(90);
+			imageOfPlayer = imageOfPlayer.transformed(trans);
 			position.setY(position.y() + step);
 		}
 		if(event->key() == Qt::Key_Up){
 			//std::cout << "inside the key press up " << std::endl;
-			imageOfPlayer = pacmanClosed;
+			imageOfPlayer = pacmanOpened;
+			trans.rotate(270);
+			imageOfPlayer = imageOfPlayer.transformed(trans);
 			position.setY(position.y() - step);
 		}
-		if(event->key() == Qt::Key_Right){
+		if(event->key() == Qt::Key_Right && canMoveRight(step)){
 			//std::cout << "inside the key press right " << std::endl;
 			imageOfPlayer = pacmanOpened;
 			position.setX(position.x() + step);
@@ -81,6 +89,7 @@ public:
 			//std::cout << "inside the key press left " << std::endl;
 			imageOfPlayer = pacmanOpened;
 			position.setX(position.x() - step);
+			trans.rotate(180);
 			imageOfPlayer = imageOfPlayer.transformed(trans);
 		}
 		playerRect.moveTo(position);
@@ -89,6 +98,21 @@ public:
 		//update();
 		
 	};
+	
+	
+	bool canMoveRight(int step);
+	/*{
+		std::cout << "canMoveRight" << Gameboard::getBoardTableValueAt(position.x()+step, position.y())  << std::endl;
+		//if(Gameboard::getBoardTableValueAt(position.x()+step, position.y()) == 1)
+		//	return false;
+		return true;
+		
+	};
+	*/
+	
+	
+	
+	
 	
 protected:
 	/*
