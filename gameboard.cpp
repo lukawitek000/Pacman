@@ -1,6 +1,7 @@
 #include "gameboard.h"
 
 #include <QPalette>
+#include <QTimer>
 
 GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		
@@ -26,8 +27,11 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		
 		player = new Player(w, h);
 		QImage board = QImage(QString("%1/prototypPlanszy.png").arg(QCoreApplication::applicationDirPath()));
+
+		//QTimer *timer =  new QTimer(this); 
 		
-		
+		connect(timer, SIGNAL(timeout()), player, SLOT(moving(int[][])));
+		timer->start(2000);
 	//	player->paint();
 		//update();
 		

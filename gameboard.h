@@ -126,5 +126,6 @@ protected:
 	
 	*/
 	
-	
+signals:
+	void timeout();
 };

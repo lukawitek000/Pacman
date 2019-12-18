@@ -59,7 +59,7 @@ public:
 		
 		//imageOfPlayer = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		imageOfPlayer = pacmanOpened;
-		playerRect = QRect(x, y, 30, 30);
+		playerRect = QRect(x, y, 25, 25);
 		//playerRect = imageOfPlayer->rect();
 		std::cout << "creating player" << std::endl;
 		//update();
@@ -75,13 +75,96 @@ public:
 		
 	};
 	
-	/*
+	
+
+	
+	
+	
+	void move(QKeyEvent *event, int boardTable[30][30]){
+		int step = 5;
+		QTransform trans;
+		//trans.rotate(180);
+		imageOfPlayer = imageOfPlayer.transformed(trans);
+		//std::cout << "inside move +++++++++++++++++++ " << std::endl;
+		if(event->key() == Qt::Key_Down){
+			imageOfPlayer = pacmanOpened;
+			trans.rotate(90);
+			imageOfPlayer = imageOfPlayer.transformed(trans);
+			
+			if(canMoveDown(boardTable)){
+				//std::cout << "inside the key press down " << std::endl;
+				dir = DOWN;
+				//position.setY(position.y() + step);
+			}
+		}
+		if(event->key() == Qt::Key_Up){
+			imageOfPlayer = pacmanOpened;
+			trans.rotate(270);
+			imageOfPlayer = imageOfPlayer.transformed(trans);
+			if(canMoveUp(boardTable)){
+			//std::cout << "inside the key press up " << std::endl;
+				dir = UP;
+			//	position.setY(position.y() - step);
+			}
+		}
+		if(event->key() == Qt::Key_Right){
+			imageOfPlayer = pacmanOpened;
+			if(canMoveRight(boardTable)){
+			//std::cout << "inside the key press right " << std::endl;
+				dir = RIGHT;
+			//	position.setX(position.x() + step);
+			}
+		}
+		if(event->key() == Qt::Key_Left){
+			imageOfPlayer = pacmanOpened;
+			trans.rotate(180);
+			imageOfPlayer = imageOfPlayer.transformed(trans);
+			if(canMoveLeft(boardTable)){
+				//std::cout << "inside the key press left " << std::endl;
+				dir = LEFT;
+			//	position.setX(position.x() - step);
+			}
+		}
+		
+		//moving(boardTable);
+		/*
+		if(dir == RIGHT){
+			position.setX(position.x() + step);
+		}else if(dir == LEFT){
+			position.setX(position.x() - step);
+		}else if(dir == DOWN){
+			position.setY(position.y() + step);
+		}else if(dir == UP){
+			position.setY(position.y() - step);
+		}*/
+		//playerRect.moveTo(position);
+		
+		
+		//update();
+		
+	};
+	
+	
+	bool canMoveRight(int boardTable[30][30]);
+	/*{
+		std::cout << "canMoveRight" << Gameboard::getBoardTableValueAt(position.x()+step, position.y())  << std::endl;
+		//if(Gameboard::getBoardTableValueAt(position.x()+step, position.y()) == 1)
+		//	return false;
+		return true;
+		
+	};
+	*/
+	
+	bool canMoveLeft(int boardTable[30][30]);
+	
+	bool canMoveUp(int boardTable[30][30]);
+	bool canMoveDown(int boardTable[30][30]);
+	
+public slots:
+		
 	void moving(int boardTable[30][30]){
-		bool con = true;
+			std::cout << "moving" << std::endl;
 		int step;
-		QElapsedTimer timer;
-		timer.start();
-		do{
 		step = 5;
 		if(dir == RIGHT){
 			if(canMoveRight(boardTable)){
@@ -114,100 +197,7 @@ public:
 		}
 		
 		playerRect.moveTo(position);
-		std::cout << "MMOVINGGGG" << std::endl;
-		if(timer.restart() > 100){
-			update();
-			repaint();
-		}
-		//QThread::msleep(10);
-		}while(con);
 	};
-	
-	*/
-	
-	
-	void move(QKeyEvent *event, int boardTable[30][30]){
-		int step = 5;
-		QTransform trans;
-		//trans.rotate(180);
-		imageOfPlayer = imageOfPlayer.transformed(trans);
-		//std::cout << "inside move +++++++++++++++++++ " << std::endl;
-		if(event->key() == Qt::Key_Down){
-			imageOfPlayer = pacmanOpened;
-			trans.rotate(90);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
-			
-			if(canMoveDown(boardTable)){
-				//std::cout << "inside the key press down " << std::endl;
-				//dir = DOWN;
-				position.setY(position.y() + step);
-			}
-		}
-		if(event->key() == Qt::Key_Up){
-			imageOfPlayer = pacmanOpened;
-			trans.rotate(270);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
-			if(canMoveUp(boardTable)){
-			//std::cout << "inside the key press up " << std::endl;
-			//	dir = UP;
-				position.setY(position.y() - step);
-			}
-		}
-		if(event->key() == Qt::Key_Right){
-			imageOfPlayer = pacmanOpened;
-			if(canMoveRight(boardTable)){
-			//std::cout << "inside the key press right " << std::endl;
-				//dir = RIGHT;
-				position.setX(position.x() + step);
-			}
-		}
-		if(event->key() == Qt::Key_Left){
-			imageOfPlayer = pacmanOpened;
-			trans.rotate(180);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
-			if(canMoveLeft(boardTable)){
-				//std::cout << "inside the key press left " << std::endl;
-				//dir = LEFT;
-				position.setX(position.x() - step);
-			}
-		}
-		
-		//moving(boardTable);
-		/*
-		if(dir == RIGHT){
-			position.setX(position.x() + step);
-		}else if(dir == LEFT){
-			position.setX(position.x() - step);
-		}else if(dir == DOWN){
-			position.setY(position.y() + step);
-		}else if(dir == UP){
-			position.setY(position.y() - step);
-		}*/
-		playerRect.moveTo(position);
-		
-		
-		//update();
-		
-	};
-	
-	
-	bool canMoveRight(int boardTable[30][30]);
-	/*{
-		std::cout << "canMoveRight" << Gameboard::getBoardTableValueAt(position.x()+step, position.y())  << std::endl;
-		//if(Gameboard::getBoardTableValueAt(position.x()+step, position.y()) == 1)
-		//	return false;
-		return true;
-		
-	};
-	*/
-	
-	bool canMoveLeft(int boardTable[30][30]);
-	
-	bool canMoveUp(int boardTable[30][30]);
-	bool canMoveDown(int boardTable[30][30]);
-	
-	
-	
 	
 	
 	
