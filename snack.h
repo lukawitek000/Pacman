@@ -3,10 +3,12 @@
 
 class Snack : public QWidget{
 private:
-	QRect snackRect;
+	
 	
 	
 public:
+	QRect snackRect;
+	
 	Snack(int x, int y, QWidget* parent = 0) :QWidget(parent){
 		snackRect = QRect(x+10, y+10, 10, 10);
 		

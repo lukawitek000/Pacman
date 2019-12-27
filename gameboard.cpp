@@ -1,6 +1,7 @@
 #include "gameboard.h"
 
 #include <QPalette>
+#include <QTimer>
 
 GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		
@@ -26,11 +27,16 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		
 		player = new Player(w, h);
 		QImage board = QImage(QString("%1/prototypPlanszy.png").arg(QCoreApplication::applicationDirPath()));
+
+		//QTimer *timer =  new QTimer(this); 
 		
-		
+		//connect(timer, SIGNAL(timeout()), player, SLOT(moving(int[][])));
+		//timer->start(2000);
 	//	player->paint();
 		//update();
-		
+		timerCount = 0;
+		timer = new QTimer(this);
+		connect(timer, SIGNAL(timeout()), this, SLOT(movePacman()));
 		
 		
 		
@@ -54,6 +60,7 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 					Snack *snack = new Snack(x*w, y*h);
 					snacks.push_back(snack);
 					gridLayout->addWidget(snacks[snacks.size()-1], y, x);
+					boardTable[x][y] = 2;
 				}
 			}
 		}
@@ -67,13 +74,37 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 	}
 	
 
+void GameBoard::movePacman(){
+	timerCount++;
+	player->move(timerCount, boardTable);
+	for(int i = 0; i < snacks.size(); i++){
+		if(player->playerRect.intersects(snacks[i]->snackRect)){
+			snacks.remove(i);
+			break;
+		}
+	}
+	update();
+}
+	
+	
 
 
 
 void GameBoard::keyPressEvent(QKeyEvent *event){
 		//std::cout << "keyerevent" << std::endl;
-		player->move(event, boardTable);
+	timer->start(speed);
+	timerCount = 0;
+	if(event->key() == Qt::Key_Right){
+		player->dir = RIGHT;
+	}else if(event->key() == Qt::Key_Left){
+		player->dir = LEFT;
+	}else if(event->key() == Qt::Key_Up){
+		player->dir = UP;
+	}else if(event->key() == Qt::Key_Down){
+		player->dir = DOWN;
+	}
+	//movePacman(event);
 //	player->move(event);
-		update();
+	update();
 		
 };

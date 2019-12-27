@@ -26,6 +26,14 @@ private:
 	QVector<Snack*> snacks;
 	int w;
 	int h;
+	int timerCount;
+	QTimer *timer;
+	int speed = 40;
+	
+	
+private slots:
+	void movePacman();
+	
 	
 	
 	
@@ -103,28 +111,11 @@ protected:
 		for(int i = 0; i<snacks.size(); i++){
 			snacks[i]->paintSnack(painter);
 		}
-		
-		
-	/*	std::cout << "paintevent -------------------" << std::endl;
-		painter.setPen(Qt::NoPen);
-		painter.setBrush(Qt::yellow);
-		//painter.drawRect(playerRect);
-		painter.drawImage(player->playerRect, player->imageOfPlayer);
-		//std::cout << "painterevent" << std::endl;
-		//*/
-		
-		
 	};
 	
 	void keyPressEvent(QKeyEvent *event);
-	/*{
-		//std::cout << "keyerevent" << std::endl;
-		player->move(event, boardTable);
-		update();
-		
-	};
+
 	
-	*/
-	
-	
+signals:
+	void timeout();
 };
