@@ -28,8 +28,8 @@ private:
 	int h;
 	int timerCount;
 	QTimer *timer;
-	int speed = 40;
-	
+	int speed = 10;
+	//int step = 1;
 	
 private slots:
 	void movePacman();

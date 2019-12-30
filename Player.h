@@ -16,6 +16,8 @@
 //#include "gameboard.h"
 
 //class Gameboard;
+
+
 enum direction{
 	RIGHT,
 	LEFT,
@@ -45,12 +47,12 @@ public:
 	QImage pacmanOpened;// = new QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 	QImage pacmanClosed;
 	enum direction dir;
+	int step = 1;
 	
 	
 	
 	
-	
-	Player(int x, int y){
+	Player(int x, int y, int size){
 		dir = RIGHT;
 		position = QPoint(x, y);
 		pacmanOpened = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
@@ -59,7 +61,7 @@ public:
 		
 		//imageOfPlayer = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		imageOfPlayer = pacmanOpened;
-		playerRect = QRect(x, y, 25, 25);
+		playerRect = QRect(x, y, size, size);
 		//playerRect = imageOfPlayer->rect();
 		std::cout << "creating player" << std::endl;
 		//update();
@@ -80,14 +82,15 @@ public:
 	
 	
 	
-	void move(int timerCount, int boardTable[30][30]){
-		int step = 5;
+	void move(int * timerCount, int boardTable[30][30]){
 		
 		QTransform trans;
 		//trans.rotate(180);
 		//imageOfPlayer = imageOfPlayer.transformed(trans);
-		//std::cout << "timercount = " << timerCount << std::endl;
-		if(timerCount%10 < 5){
+		std::cout << "timercount = " << *timerCount << std::endl;
+		if(*timerCount == 20)
+			*timerCount = 0;
+		if(*timerCount%20 < 10){
 			imageOfPlayer = pacmanOpened;
 		}else{
 			imageOfPlayer = pacmanClosed;
@@ -117,7 +120,6 @@ public:
 			}
 		}
 		playerRect.moveTo(position);
-		
 		
 		//update();
 		

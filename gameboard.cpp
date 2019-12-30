@@ -23,9 +23,9 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 			}
 		}
 		
+		 
 		
-		
-		player = new Player(w, h);
+		//player = new Player(w, h);
 		QImage board = QImage(QString("%1/prototypPlanszy.png").arg(QCoreApplication::applicationDirPath()));
 
 		//QTimer *timer =  new QTimer(this); 
@@ -48,6 +48,7 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		for(int x = 0; x<board.width(); x++){
 			for(int y = 0; y<board.height(); y++){
 				if(board.pixel(x, y) == qRgb(0,0,255)){
+					player = new Player(x*w, y*h, 30);
 					gridLayout->addWidget(player, y, x);
 					std::cout << "player add " << std::endl;
 				}else if(board.pixel(x, y) == qRgb(0,0,0)){
@@ -60,7 +61,7 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 					Snack *snack = new Snack(x*w, y*h);
 					snacks.push_back(snack);
 					gridLayout->addWidget(snacks[snacks.size()-1], y, x);
-					boardTable[x][y] = 2;
+					//boardTable[x][y] = 2;
 				}
 			}
 		}
@@ -76,7 +77,7 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 
 void GameBoard::movePacman(){
 	timerCount++;
-	player->move(timerCount, boardTable);
+	player->move(&timerCount, boardTable);
 	for(int i = 0; i < snacks.size(); i++){
 		if(player->playerRect.intersects(snacks[i]->snackRect)){
 			snacks.remove(i);
@@ -93,14 +94,22 @@ void GameBoard::movePacman(){
 void GameBoard::keyPressEvent(QKeyEvent *event){
 		//std::cout << "keyerevent" << std::endl;
 	timer->start(speed);
-	timerCount = 0;
-	if(event->key() == Qt::Key_Right){
+	//timerCount = 0;
+	if(event->key() == Qt::Key_Right && player->canMoveRight(boardTable)){
+		if(player->dir != RIGHT)
+			timerCount = 0;
 		player->dir = RIGHT;
-	}else if(event->key() == Qt::Key_Left){
+	}else if(event->key() == Qt::Key_Left && player->canMoveLeft(boardTable)){
+		if(player->dir != LEFT)
+			timerCount = 0;
 		player->dir = LEFT;
-	}else if(event->key() == Qt::Key_Up){
+	}else if(event->key() == Qt::Key_Up && player->canMoveUp(boardTable)){
+		if(player->dir != UP)
+			timerCount = 0;
 		player->dir = UP;
-	}else if(event->key() == Qt::Key_Down){
+	}else if(event->key() == Qt::Key_Down && player->canMoveDown(boardTable)){
+		if(player->dir != DOWN)
+			timerCount = 0;
 		player->dir = DOWN;
 	}
 	//movePacman(event);
