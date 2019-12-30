@@ -13,11 +13,7 @@
 
 #include <QElapsedTimer>
 
-//#include "gameboard.h"
-
-//class Gameboard;
-
-
+/*
 enum direction{
 	RIGHT,
 	LEFT,
@@ -25,57 +21,50 @@ enum direction{
 	DOWN
 };
 
-
-
-
-
-
-
-class Player : public QWidget{
-private:
-	/*
-	QRect playerRect;
-	QPoint position;
-	QImage imageOfPlayer;
-	QImage pacmanOpened;// = new QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
-	QImage pacmanClosed;// = new QImage(QString("%1/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
 */
-public:
-	QRect playerRect;
-	QPoint position;
-	QImage imageOfPlayer;
-	QImage pacmanOpened;// = new QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
+
+
+
+
+
+class Player : public Figure{
+private:
+	
+	QImage pacmanOpened;
 	QImage pacmanClosed;
-	enum direction dir;
-	int step = 1;
 	
 	
+	void animation(int * timerCount){
+		if(*timerCount == 20)
+			*timerCount = 0;
+		if(*timerCount%20 < 10){
+			image = pacmanOpened;
+		}else{
+			image = pacmanClosed;
+		}
+		
+		
+		
+	};
+public:
 	
-	
-	Player(int x, int y, int size){
+	Player(int x, int y,QWidget * parent = 0) : Figure(parent){
 		dir = RIGHT;
+		nextDir = RIGHT;
 		position = QPoint(x, y);
 		pacmanOpened = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		pacmanClosed = QImage(QString("%1/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
 		
 		
-		//imageOfPlayer = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
-		imageOfPlayer = pacmanOpened;
-		playerRect = QRect(x, y, size, size);
-		//playerRect = imageOfPlayer->rect();
+		//image = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
+		image = pacmanOpened;
+		FigureRect = QRect(x, y, size, size);
+		//FigureRect = imageOfPlayer->rect();
 		std::cout << "creating player" << std::endl;
 		//update();
 	};
 	
-	void paintPlayer(QPainter &painter){
-		painter.setPen(Qt::NoPen);
-		painter.setBrush(Qt::black);
-		//painter.drawRect(playerRect);
-		
-		painter.drawImage(playerRect, imageOfPlayer);
-	//	std::cout << "painterevent" << std::endl;
-		
-	};
+	
 	
 	
 
@@ -83,11 +72,12 @@ public:
 	
 	
 	void move(int * timerCount, int boardTable[30][30]){
-		
 		QTransform trans;
-		//trans.rotate(180);
-		//imageOfPlayer = imageOfPlayer.transformed(trans);
-		std::cout << "timercount = " << *timerCount << std::endl;
+		//std::cout << "timercount = " << *timerCount << std::endl;
+		image = pacmanOpened;
+		//std::cout << "dir = " << dir << std::endl;
+		//std::cout << "nextDir = " << nextDir << std::endl;
+		/*
 		if(*timerCount == 20)
 			*timerCount = 0;
 		if(*timerCount%20 < 10){
@@ -95,75 +85,78 @@ public:
 		}else{
 			imageOfPlayer = pacmanClosed;
 		}
+		*/
+		//animation(timerCount);
 		
-		
-		if(dir == RIGHT && canMoveRight(boardTable)){
-			position.setX(position.x() + step);
+		if(dir == RIGHT){
+			if(canMoveRight(boardTable)){
+				position.setX(position.x() + step);
+				animation(timerCount);
+			}else{
+				*timerCount = 0;
+			}
 		}else if(dir == LEFT){
-			trans.rotate(180);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
+			
 			if(canMoveLeft(boardTable)){
 				position.setX(position.x() - step);
+				animation(timerCount);
+			}else{
+				*timerCount = 0;
 			}
+			
+			trans.rotate(180);
+			image = image.transformed(trans);
 		}else if(dir == DOWN){
 			
-			trans.rotate(90);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
+			
 			if(canMoveDown(boardTable)){
 				position.setY(position.y() + step);
+				animation(timerCount);
+			}else{
+				*timerCount = 0;
 			}
+			trans.rotate(90);
+			image = image.transformed(trans);
 		}else if(dir == UP){
-			trans.rotate(270);
-			imageOfPlayer = imageOfPlayer.transformed(trans);
+			
 			if(canMoveUp(boardTable)){
 				position.setY(position.y() - step);
+				animation(timerCount);
+			}else{
+				*timerCount = 0;
 			}
+			trans.rotate(270);
+			image = image.transformed(trans);
 		}
-		playerRect.moveTo(position);
+		
+		if(nextDir == RIGHT && canMoveRight(boardTable)){
+			dir = RIGHT;
+		}else if(nextDir == LEFT && canMoveLeft(boardTable)){
+			dir = LEFT;
+		}else if(nextDir == UP && canMoveUp(boardTable)){
+			dir = UP;
+		}else if(nextDir == DOWN && canMoveDown(boardTable)){
+			dir = DOWN;
+		}
+		
+		//std::cout << "QWidget::width() " << this->width() << std::endl;
+		
+		
+		if(dir == RIGHT && position.x() == 690){
+			position.setX(0-FigureRect.width());
+		}else if(dir == LEFT && position.x() == 0-FigureRect.width()){
+			position.setX(690);
+		}
+		
+		
+		FigureRect.moveTo(position);
 		
 		//update();
 		
 	};
 	
-	
-	bool canMoveRight(int boardTable[30][30]);
-	/*{
-		std::cout << "canMoveRight" << Gameboard::getBoardTableValueAt(position.x()+step, position.y())  << std::endl;
-		//if(Gameboard::getBoardTableValueAt(position.x()+step, position.y()) == 1)
-		//	return false;
-		return true;
-		
-	};
-	*/
-	
-	bool canMoveLeft(int boardTable[30][30]);
-	
-	bool canMoveUp(int boardTable[30][30]);
-	bool canMoveDown(int boardTable[30][30]);
-	
-	
-	
-	
-protected:
-	/*
-	void paintEvent(QPaintEvent ){
-		QPainter painter(this);
-		painter.setPen(Qt::NoPen);
-		painter.setBrush(Qt::black);
-		//painter.drawRect(playerRect);
-		painter.drawImage(playerRect, imageOfPlayer);
-		//std::cout << "painterevent" << std::endl;
-	};
-	*/
-	
-	
-	
-	
-	
-	
-	//void keyPressEvent(QKeyEvent *event){
-	
-	
+
+
 	
 	
 };

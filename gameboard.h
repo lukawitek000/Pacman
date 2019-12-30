@@ -1,5 +1,6 @@
 #pragma once 
 
+
 //PACMAN BOARD
 #include <QWidget>
 #include <QGridLayout>
@@ -9,10 +10,24 @@
 #include <QPainter>
 #include <QVector>
 
-//class GameBoard;
+#define BOARD_WIDTH 23
+#define BOARD_HEIGHT 22
+#define SIZE_OF_SIGNLE_ELEMENT 30
+#define WIDTH_OF_WINDOW 30*23
+#define HEIGHT_OF_WINDOW 22*30 + 100
+
+
+
+
+#include "Figure.h"
 #include "Player.h"
 #include "Wall.h"
 #include "snack.h"
+#include "superSnack.h" 
+#include "lcdScore.h"
+#include "Gate.h"
+
+#include "Blinky.h"
 
 
 
@@ -20,21 +35,26 @@ class GameBoard : public QWidget{
 	
 	Q_OBJECT
 	
-private:
+private: 
+	Blinky *blinky;
 	Player *player;
 	QVector<Wall*> walls;
 	QVector<Snack*> snacks;
+	QVector<SuperSnack*> superSnacks; 
+	Gate *gate;
 	int w;
 	int h;
 	int timerCount;
 	QTimer *timer;
 	int speed = 10;
-	//int step = 1;
+	
+	LCDScore * score;
+	LCDScore * lives;
 	
 private slots:
 	void movePacman();
-	
-	
+	  
+	  
 	
 	
 public:
@@ -95,27 +115,13 @@ public:
 	static int getBoardTableValueAt(int x, int y){
 		return boardTable[x][y];
 	};*/
-protected:
+protected:  
 	
-	void paintEvent(QPaintEvent* /*event*/){
-		QPainter painter(this);
-		QRect background(0, 0, w*30, h*30);
-		//painter.setPen(Qt::NoPen);
-		//painter.setBrush(Qt::black);
-		//painter.drawRect(background);
-		painter.fillRect(background, Qt::black);
-		player->paintPlayer(painter);
-		for(int i = 0; i<walls.size(); i++){
-			walls[i]->paintWall(painter);
-		}
-		for(int i = 0; i<snacks.size(); i++){
-			snacks[i]->paintSnack(painter);
-		}
-	};
-	
+	void paintEvent(QPaintEvent* /*event*/);
 	void keyPressEvent(QKeyEvent *event);
 
 	
 signals:
 	void timeout();
+	void collect(int);
 };

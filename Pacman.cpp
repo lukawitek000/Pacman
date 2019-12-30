@@ -24,7 +24,6 @@ int main(int argc, char* argv[])
 	
 	QApplication app(argc, argv);
 	GameBoard gameboard;
-	//gameboard.resize(900, 900);
 	gameboard.show();
 	
 	

@@ -50,13 +50,17 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = gameboard.cpp \
+SOURCES       = Figure.cpp \
+		gameboard.cpp \
 		Pacman.cpp \
-		Player.cpp moc_gameboard.cpp
-OBJECTS       = gameboard.o \
+		Player.cpp moc_gameboard.cpp \
+		moc_lcdScore.cpp
+OBJECTS       = Figure.o \
+		gameboard.o \
 		Pacman.o \
 		Player.o \
-		moc_gameboard.o
+		moc_gameboard.o \
+		moc_lcdScore.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -130,11 +134,21 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		pacman.pro Figure.h \
+		pacman.pro Blinky.h \
+		Board.h \
+		Clyde.h \
+		Figure.h \
 		gameboard.h \
+		Gate.h \
+		ghost.h \
+		Inky.h \
+		lcdScore.h \
+		Pinky.h \
 		Player.h \
 		snack.h \
-		Wall.h gameboard.cpp \
+		superSnack.h \
+		Wall.h Figure.cpp \
+		gameboard.cpp \
 		Pacman.cpp \
 		Player.cpp
 QMAKE_TARGET  = pacman
@@ -318,8 +332,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Figure.h gameboard.h Player.h snack.h Wall.h $(DISTDIR)/
-	$(COPY_FILE) --parents gameboard.cpp Pacman.cpp Player.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Blinky.h Board.h Clyde.h Figure.h gameboard.h Gate.h ghost.h Inky.h lcdScore.h Pinky.h Player.h snack.h superSnack.h Wall.h $(DISTDIR)/
+	$(COPY_FILE) --parents Figure.cpp gameboard.cpp Pacman.cpp Player.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -351,16 +365,26 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_gameboard.cpp
+compiler_moc_header_make_all: moc_gameboard.cpp moc_lcdScore.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_gameboard.cpp
-moc_gameboard.cpp: Player.h \
+	-$(DEL_FILE) moc_gameboard.cpp moc_lcdScore.cpp
+moc_gameboard.cpp: Figure.h \
+		Player.h \
 		Wall.h \
 		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Gate.h \
+		Blinky.h \
 		gameboard.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/luke/Desktop/pacman -I/home/luke/Desktop/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include gameboard.h -o moc_gameboard.cpp
+
+moc_lcdScore.cpp: lcdScore.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include ./moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/luke/Desktop/pacman -I/home/luke/Desktop/pacman -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include lcdScore.h -o moc_lcdScore.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -376,26 +400,47 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
+Figure.o: Figure.cpp Figure.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Figure.o Figure.cpp
+
 gameboard.o: gameboard.cpp gameboard.h \
+		Figure.h \
 		Player.h \
 		Wall.h \
-		snack.h
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Gate.h \
+		Blinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameboard.o gameboard.cpp
 
 Pacman.o: Pacman.cpp gameboard.h \
+		Figure.h \
 		Player.h \
 		Wall.h \
-		snack.h
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Gate.h \
+		Blinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o Pacman.cpp
 
 Player.o: Player.cpp gameboard.h \
+		Figure.h \
 		Player.h \
 		Wall.h \
-		snack.h
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Gate.h \
+		Blinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Player.o Player.cpp
 
 moc_gameboard.o: moc_gameboard.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gameboard.o moc_gameboard.cpp
+
+moc_lcdScore.o: moc_lcdScore.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_lcdScore.o moc_lcdScore.cpp
 
 ####### Install
 
