@@ -34,8 +34,9 @@ class Figure : public QWidget{
 	
 protected:
 	 
-	QPoint position;
+	
 	QImage image;
+	QImage frightenedGhost = QImage(QString("%1/vulnerableGhost.png").arg(QCoreApplication::applicationDirPath()));;
 	Mode mode;
 
 	int size = 30;
@@ -45,13 +46,13 @@ protected:
 public:
 	enum direction dir;
 	enum direction nextDir;
-	
+	QPoint position;
 	QRect FigureRect;
 	
 	Figure(QWidget * parent = 0) : QWidget(parent){};
 	
 	
-	virtual void move(int * timerCount, int boardTable[30][30]) = 0;
+	void move(int * timerCount, int boardTable[30][30]);
 	void paintFigure(QPainter &painter);
 	
 	bool canMoveRight(int boardTable[30][30]);

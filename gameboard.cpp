@@ -74,18 +74,30 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 					Snack * superSnack = new SuperSnack(x*w, y*h);
 					snacks.push_back(superSnack);
 					gridLayout->addWidget(superSnack, y, x);
-				}else if(board.pixel(x, y) == qRgb(128, 128, 128)){
+				}
+				else if(board.pixel(x, y) == qRgb(128, 128, 128)){
 					//blokadka
 					boardTable[x][y] = 10;
 					gate = new Gate(x*w, y*h);
 					walls.push_back(gate);
 					gridLayout->addWidget(gate, y, x);
-					
+					std::cout << "gate position " << x*w << std::endl;
 					
 				}else if(board.pixel(x, y) == qRgb(127, 0, 0)){
 					blinky = new Blinky(x*w, y*h);
 					gridLayout -> addWidget(blinky, y, x);
 					
+					
+				}else if(board.pixel(x, y) == qRgb(0,255,255)){
+					inky = new Inky(x*w, y*h);
+					gridLayout -> addWidget(inky, y, x);
+				}else if(board.pixel(x,y) == qRgb(255, 106, 0)){
+					clyde = new Clyde(x*w, y*h);
+					gridLayout -> addWidget(clyde, y, x);
+					
+				}else if(board.pixel(x, y) == qRgb(255, 0, 220)){
+					pinky = new Pinky(x*w, y*h);
+					gridLayout -> addWidget(pinky, y, x);
 					
 				}
 			}
@@ -109,7 +121,7 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 		
 		/*
 		std::cout << "boardTable:" << std::endl;
-		for(int i=0; i<30; i++){
+		for(int i=0; i<30; i++){ 
 			for(int j=0; j<30; j++){
 				std::cout << boardTable[i][j] << " ";
 			}
@@ -122,6 +134,11 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 void GameBoard::movePacman(){
 	timerCount++;
 	player->move(&timerCount, boardTable);
+	blinky ->move(*player, boardTable);
+	inky->move(*player, *blinky , boardTable);
+	clyde ->move(*player, boardTable);
+	pinky->move(*player, boardTable);
+	
 	for(int i = 0; i < snacks.size(); i++){
 		if(player->FigureRect.intersects(snacks[i]->snackRect)){
 			if(snacks[i]->isSuperSnack){
@@ -136,17 +153,20 @@ void GameBoard::movePacman(){
 	update();
 }
 	
-void GameBoard::paintEvent(QPaintEvent* /*event*/){
+void GameBoard::paintEvent(QPaintEvent* /*event*/){ 
 		QPainter painter(this);
-		player->paintFigure(painter);
-		blinky->paintFigure(painter);
+		
 		for(int i = 0; i<walls.size(); i++){
 			walls[i]->paintWall(painter);
 		}
 		for(int i = 0; i<snacks.size(); i++){
 			snacks[i]->paintSnack(painter);
 		}
-		
+		player->paintFigure(painter);
+		blinky->paintFigure(painter);
+		inky->paintFigure(painter);  
+		clyde->paintFigure(painter);
+		pinky->paintFigure(painter);
 		//std::cout << "num of snacks "<< snacks.size() << std::endl;
 };
 

@@ -21,46 +21,51 @@
 
 #include "Figure.h"
 #include "Player.h"
-#include "Wall.h"
+#include "Wall.h" 
 #include "snack.h"
 #include "superSnack.h" 
 #include "lcdScore.h"
 #include "Gate.h"
 
 #include "Blinky.h"
+#include "Inky.h"
+#include "Clyde.h" 
+#include "Pinky.h"
 
-
-
-class GameBoard : public QWidget{
-	
+class GameBoard : public QWidget{ 
+	 
 	Q_OBJECT
 	
 private: 
 	Blinky *blinky;
-	Player *player;
+	Inky *inky;
+	Clyde *clyde;
+	Pinky *pinky;
+	
+	Player *player; 
 	QVector<Wall*> walls;
 	QVector<Snack*> snacks;
-	QVector<SuperSnack*> superSnacks; 
+	QVector<SuperSnack*> superSnacks;   
 	Gate *gate;
 	int w;
 	int h;
-	int timerCount;
+	int timerCount; 
 	QTimer *timer;
 	int speed = 10;
 	
-	LCDScore * score;
+	LCDScore * score;  
 	LCDScore * lives;
-	
+	 
 private slots:
-	void movePacman();
+	void movePacman(); 
 	  
 	  
+	 
 	
-	
-public:
+public: 
 	int boardTable[30][30];
 	
-	GameBoard(QWidget *parent  = 0);/*: QWidget(parent){
+	GameBoard(QWidget *parent  = 0);/*: QWidget(parent){ ss
 		
 		this-> resize(900, 900);
 		int w = width() / 30;
