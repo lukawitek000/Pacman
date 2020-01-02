@@ -376,6 +376,9 @@ moc_gameboard.cpp: Figure.h \
 		lcdScore.h \
 		Gate.h \
 		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h \
 		gameboard.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
@@ -411,7 +414,10 @@ gameboard.o: gameboard.cpp gameboard.h \
 		superSnack.h \
 		lcdScore.h \
 		Gate.h \
-		Blinky.h
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameboard.o gameboard.cpp
 
 Pacman.o: Pacman.cpp gameboard.h \
@@ -422,7 +428,10 @@ Pacman.o: Pacman.cpp gameboard.h \
 		superSnack.h \
 		lcdScore.h \
 		Gate.h \
-		Blinky.h
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o Pacman.cpp
 
 Player.o: Player.cpp gameboard.h \
@@ -433,7 +442,10 @@ Player.o: Player.cpp gameboard.h \
 		superSnack.h \
 		lcdScore.h \
 		Gate.h \
-		Blinky.h
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Player.o Player.cpp
 
 moc_gameboard.o: moc_gameboard.cpp 

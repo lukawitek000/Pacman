@@ -9,6 +9,9 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <QVector>
+#include <QPushButton>
+
+
 
 #define BOARD_WIDTH 23
 #define BOARD_HEIGHT 22
@@ -32,6 +35,8 @@
 #include "Clyde.h" 
 #include "Pinky.h"
 
+
+
 class GameBoard : public QWidget{ 
 	 
 	Q_OBJECT
@@ -43,83 +48,55 @@ private:
 	Pinky *pinky;
 	
 	Player *player; 
+	
+	
+	QPoint playerInit;
+	QPoint blinkyInit;
+	QPoint inkyInit;
+	QPoint pinkyInit;
+	QPoint clydeInit;
+	
+	
+	
 	QVector<Wall*> walls;
 	QVector<Snack*> snacks;
 	QVector<SuperSnack*> superSnacks;   
 	Gate *gate;
-	int w;
+	int w; 
 	int h;
 	int timerCount; 
+	
+	bool gameOver;
+	bool win;
+	bool dead;
+	
+	int ghostTimer;
+	
 	QTimer *timer;
+	
 	int speed = 10;
 	
 	LCDScore * score;  
 	LCDScore * lives;
+	
+	QImage board;
+	QGridLayout *gridLayout;
+	QGridLayout *layout;
+	
+	void init();
 	 
 private slots:
 	void movePacman(); 
-	  
-	  
+	void newGame();  
+	
 	 
 	
 public: 
 	int boardTable[30][30];
 	
-	GameBoard(QWidget *parent  = 0);/*: QWidget(parent){ ss
-		
-		this-> resize(900, 900);
-		int w = width() / 30;
-		int h = height() / 30;
-		
-		for(int i=0; i<30; i++){
-			for(int j=0; j<30; j++){
-				boardTable[i][j] = 0;
-			}
-		}
-		
-		
-		
-		player = new Player(w, h);
-		QImage board = QImage(QString("%1/prototypPlanszy.png").arg(QCoreApplication::applicationDirPath()));
-		
-		
-	//	player->paint();
-		//update();
-		
-		
-		
-		
-		
-		
-	//	QColor color;
-		QGridLayout *gridLayout = new QGridLayout;
-		//gridLayout->setVerticalSpacing( 10);
-		for(int x = 0; x<board.width(); x++){
-			for(int y = 0; y<board.height(); y++){
-				if(board.pixel(x, y) == qRgb(0,0,255)){
-					gridLayout->addWidget(player, y, x);
-					std::cout << "player add " << std::endl;
-				}else if(board.pixel(x, y) == qRgb(0,0,0)){
-					boardTable[x][y] = 1;
-					Wall * wall = new Wall(x*w, y*h, w, h);
-					walls.push_back(wall);
-					gridLayout -> addWidget(walls[walls.size()-1], y, x);
-					//std::cout << "wall add " << std::endl;
-				}//else{
-			}
-		}
-		
-		std::cout << "horizontal spacing" << gridLayout->horizontalSpacing() <<std::endl;
-		std::cout << "vertical spacing" << gridLayout->verticalSpacing() <<std::endl;
-		
-		setLayout(gridLayout);
-		player->setFocus();
-		//this->setStyleSheet("background-color:black;");
-	};
+	GameBoard(QWidget *parent  = 0);
 	
-	static int getBoardTableValueAt(int x, int y){
-		return boardTable[x][y];
-	};*/
+	
 protected:  
 	
 	void paintEvent(QPaintEvent* /*event*/);
@@ -129,4 +106,7 @@ protected:
 signals:
 	void timeout();
 	void collect(int);
+	void die();
+	
+	
 };

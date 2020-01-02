@@ -30,6 +30,7 @@ enum direction{
 class Player : public Figure{
 private:
 	
+	
 	QImage pacmanOpened;
 	QImage pacmanClosed;
 	
@@ -54,18 +55,17 @@ public:
 		position = QPoint(x, y);
 		pacmanOpened = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		pacmanClosed = QImage(QString("%1/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
-		
+		step =1 ;
+		initPosition = position;
 		
 		//image = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
 		image = pacmanOpened;
 		FigureRect = QRect(x, y, size, size);
 		//FigureRect = imageOfPlayer->rect();
 		std::cout << "creating player" << std::endl;
+		initImage = image;
 		//update();
 	};
-	
-	
-	
 	
 
 	
@@ -142,9 +142,9 @@ public:
 		//std::cout << "QWidget::width() " << this->width() << std::endl;
 		
 		
-		if(dir == RIGHT && position.x() == 690){
+		if(dir == RIGHT && position.x() >= 690){
 			position.setX(0-FigureRect.width());
-		}else if(dir == LEFT && position.x() == 0-FigureRect.width()){
+		}else if(dir == LEFT && position.x() <= 0-FigureRect.width()){
 			position.setX(690);
 		}
 		

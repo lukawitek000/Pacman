@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+#include <stdlib.h>
+#include <time.h>
+
 // go to point x = 20*30 , y = 0
 
 
@@ -24,7 +27,7 @@ private:
 		}
 		else if(pathUp < pathRight && pathUp < pathLeft && pathUp < pathDown){
 			dir = UP;
-		}else{
+		}else if(pathDown < pathRight && pathDown < pathLeft && pathDown < pathUp){
 			dir = DOWN;
 		}
 	};
@@ -52,39 +55,58 @@ private:
 		findShortestPath(pathRight, pathLeft, pathUp, pathDown);
 		
 	};
+
+	
 	
 	
 	
 public:
+	
+	
+	
+	
 	Blinky(int x, int y, QWidget * parent = 0) : Figure(parent){
 		position = QPoint(x, y);
-		image = QImage(QString("%1/Blinky.png").arg(QCoreApplication::applicationDirPath()));
+		normalImage = QImage(QString("%1/Blinky.png").arg(QCoreApplication::applicationDirPath()));
+		image = normalImage;
 		FigureRect = QRect(x, y, size, size);
 		std::cout << "creating Blinky" << std::endl;
 		aim = QPoint(600, 0);
-		mode = CHASE;
+		//mode = SCATTER;
 		dir = LEFT;
+		initPosition = position;
+		initImage = image;
 	};
 	
 	
 
-	void move(const Player &p, int boardTable[30][30]){
+	void move(const Player &p, int boardTable[30][30], int *ghostTimer){
 		
-		if(mode == SCATTER){
+		selectMode(ghostTimer);
+		
+		if(!getOutFromHome()){
+			if(Figure::mode == SCATTER){
+				image = normalImage;
+				aim.setX(600);
+				aim.setY(0);
+			}else if(Figure::mode == CHASE){
+				image = normalImage;
+				aim.setX(p.position.x());
+				aim.setY(p.position.y());
+				//choosePath(boardTable);
+			}else if(Figure::mode == FRIGHTENED){
+				
+				srand(time(NULL));
+				flickingGhost();
+				//image = frightenedGhost;
+				aim.setX(rand() % 600 + 1);
+				aim.setY(rand() % 600 + 1);
+				
+			}
+			choosePath(boardTable);
+		}else if(mode !=FRIGHTENED){
 			image = normalImage;
-			aim.setX(600);
-			aim.setY(0);
-			
-			
-		}else if(mode == CHASE){
-			image = normalImage;
-			aim.setX(p.position.x());
-			aim.setY(p.position.y());
-			//choosePath(boardTable);
-		}else if(mode == FRIGHTENED){
-			image = frightenedGhost;
 		}
-		choosePath(boardTable);
 		//std::cout << "binky dir " << dir << std::endl;
 		if(dir == RIGHT){
 			if(canMoveRight(boardTable)){
@@ -104,9 +126,9 @@ public:
 			}
 		}
 		
-		if(dir == RIGHT && position.x() == 690){
+		if(dir == RIGHT && position.x() >= 690){
 			position.setX(0-FigureRect.width());
-		}else if(dir == LEFT && position.x() == 0-FigureRect.width()){
+		}else if(dir == LEFT && position.x() <= 0-FigureRect.width()){
 			position.setX(690);
 		}
 		

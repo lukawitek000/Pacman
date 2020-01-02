@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cmath>
-
+#include <stdlib.h>
+#include <time.h>
 // go to point x = 20*30 , y = 0
 
 
@@ -24,7 +25,7 @@ private:
 		}
 		else if(pathUp < pathRight && pathUp < pathLeft && pathUp < pathDown){
 			dir = UP;
-		}else{
+		}else if(pathDown < pathRight && pathDown < pathLeft && pathDown < pathUp){
 			dir = DOWN;
 		}
 	};
@@ -52,56 +53,108 @@ private:
 		findShortestPath(pathRight, pathLeft, pathUp, pathDown);
 		
 	};
+	/*
+	void selectMode(int *ghostTimer){
+		if(Figure::mode != FRIGHTENED){
+			if(*ghostTimer % 2700 < 700){
+				Figure::mode = SCATTER;
+			}else{
+				Figure::mode = CHASE;
+			}
+			if(*ghostTimer == 2700){
+				*ghostTimer = 0;
+			}
+		}else{
+			//ghostTimer--;
+			vulnerableCounter++;
+			if(vulnerableCounter == 500){
+				Figure::mode = SCATTER;
+				vulnerableCounter = 0;
+				*ghostTimer = 0;
+			}
+		}
+		
+		
+	};
+	*/
+	
+	
 	
 	
 	
 public:
+	
+	
 	Inky(int x, int y, QWidget * parent = 0) : Figure(parent){
 		position = QPoint(x, y);
-		image = QImage(QString("%1/Inky.png").arg(QCoreApplication::applicationDirPath()));
+		normalImage = QImage(QString("%1/Inky.png").arg(QCoreApplication::applicationDirPath()));
+		image = normalImage;
 		FigureRect = QRect(x, y, size, size);
 		std::cout << "creating Inky" << std::endl;
 		aim = QPoint(600, 800);
-		mode = CHASE;
-		dir = LEFT;
+		//mode = SCATTER;
+		dir = UP;
+		initPosition = position;
+		initImage = image;
 	};
 	
 	
 
-	void move(const Player &p, const Blinky &b, int boardTable[30][30]){
+	void move(const Player &p, const Blinky &b, int boardTable[30][30], int *ghostTimer){
+		//std::cout << "inky position " << position.x() << " , " << position.y() << std::endl;
+		//std::cout << "inky dir " << dir << std::endl;
+		selectMode(ghostTimer);
 		
-		if(mode == SCATTER){
-			image = normalImage;
-			choosePath(boardTable);
-		}else if(mode == CHASE){
-			image = normalImage;
-			int x1 = 0;
-			int y1 = 0;
-			if(p.dir == RIGHT){
-				x1 = p.position.x() + 2*30;
-				y1 = p.position.y();
-			}else if(p.dir == LEFT){
-				x1 = p.position.x() - 2*30;
-				y1 = p.position.y();
-			}else if(p.dir == UP){
-				x1 = p.position.x();
-				y1 = p.position.y() - 2*30;
-			}else if(p.dir == DOWN){
-				x1 = p.position.x();
-				y1 = p.position.y() + 2*30;
+		
+		
+		if(!getOutFromHome()){
+			if(Figure::mode == SCATTER){
+				image = normalImage;
+				aim.setX(600);
+				aim.setY(800);
+			}else if(Figure::mode == CHASE){
+				image = normalImage;
+				int x1 = 0;
+				int y1 = 0;
+				if(p.dir == RIGHT){
+					x1 = p.position.x() + 2*30;
+					y1 = p.position.y();
+				}else if(p.dir == LEFT){
+					x1 = p.position.x() - 2*30;
+					y1 = p.position.y();
+				}else if(p.dir == UP){
+					x1 = p.position.x();
+					y1 = p.position.y() - 2*30;
+				}else if(p.dir == DOWN){
+					x1 = p.position.x();
+					y1 = p.position.y() + 2*30;
+				}
+				
+				int dx = abs(x1 - b.position.x());
+				int dy = abs(y1 - b.position.y());
+				
+				aim.setX(p.position.x() + dx);
+				aim.setY(p.position.y() + dy);
+
+				
+			}else if(Figure::mode == FRIGHTENED){
+				srand(time(NULL));
+				/*if(vulnerableCounter > 700){
+					if(vulnerableCounter %10 < 5){
+						image = frightenedGhost;
+					}else{
+						image = frightenedGhostWhite;
+					}
+				}else{
+					image = frightenedGhost;
+				}*/
+				flickingGhost();
+				aim.setX(rand() % 600 + 1);
+				aim.setY(rand() % 600 + 1);
 			}
-			
-			int dx = abs(x1 - b.position.x());
-			int dy = abs(y1 - b.position.y());
-			
-			aim.setX(p.position.x() + dx);
-			aim.setY(p.position.y() + dy);
-			
-			
 			choosePath(boardTable);
-			
-		}else if(mode == FRIGHTENED){
-			image = frightenedGhost;
+		}else if(mode !=FRIGHTENED){
+			image = normalImage;
 		}
 		
 		

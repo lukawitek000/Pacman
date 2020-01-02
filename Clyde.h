@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cmath>
-
+#include <stdlib.h>
+#include <time.h>
 // go to point x = 20*30 , y = 0
 
 
@@ -24,7 +25,7 @@ private:
 		}
 		else if(pathUp < pathRight && pathUp < pathLeft && pathUp < pathDown){
 			dir = UP;
-		}else{
+		}else if(pathDown < pathRight && pathDown < pathLeft && pathDown < pathUp){
 			dir = DOWN;
 		}
 	};
@@ -52,52 +53,91 @@ private:
 		findShortestPath(pathRight, pathLeft, pathUp, pathDown);
 		
 	};
+	/*
+	void selectMode(int *ghostTimer){
+		if(Figure::mode != FRIGHTENED){
+			if(*ghostTimer % 2700 < 700){
+				Figure::mode = SCATTER;
+			}else{
+				Figure::mode = CHASE;
+			}
+			if(*ghostTimer == 2700){
+				*ghostTimer = 0;
+			}
+		}else{
+			//ghostTimer--;
+			vulnerableCounter++;
+			if(vulnerableCounter == 500){
+				Figure::mode = SCATTER;
+				vulnerableCounter = 0;
+				*ghostTimer = 0;
+			}
+		}
+		
+		
+	};*/
+	
+	
+	
 	
 	
 	
 public:
+	
 	Clyde(int x, int y, QWidget * parent = 0) : Figure(parent){
 		position = QPoint(x, y);
-		image = QImage(QString("%1/Clyde.png").arg(QCoreApplication::applicationDirPath()));
+		normalImage = QImage(QString("%1/Clyde.png").arg(QCoreApplication::applicationDirPath()));
+		image = normalImage;
 		FigureRect = QRect(x, y, size, size);
 		std::cout << "creating Clyde" << std::endl;
 		aim = QPoint(0, 800);
-		mode = SCATTER;
+		//mode = SCATTER;
 		dir = LEFT;
-		
+		initPosition = position;
+		initImage = image;
 	};
 	
 	
 
-	void move(const Player &p, int boardTable[30][30]){
-		//std::cout << "clyde aim " << aim.x() << " , " << aim.y() << std::endl;
+	void move(const Player &p, int boardTable[30][30], int *ghostTimer){
+		//std::cout << "clyde position " << position.x() << " , " << position.y() << std::endl;
 		//std::cout << "mode Clyde " << mode <<  std::endl;
-		if(mode == SCATTER){
-			aim.setX(0);
-			aim.setY(800);
-			image = normalImage;
-			if(position.y() == 300 && position.x() == 330){
-				dir = UP;
-				mode = CHASE;
-			}else{
-				choosePath(boardTable);
-				
-			}
-		}else if(mode == CHASE){
-			image = normalImage;
-			aim.setX(p.position.x());
-			aim.setY(p.position.y());
-			if(findPathLength(position.x(), position.y()) > 8*30){
-				aim.setX(p.position.x());
-				aim.setY(p.position.y());
-				//std::cout << "-----------------------------" <<  std::endl;
-			}else{
+		
+		
+		
+		
+		selectMode(ghostTimer);
+		
+		
+		if(!getOutFromHome()){
+			if(Figure::mode == SCATTER){
 				aim.setX(0);
 				aim.setY(800);
+				image = normalImage;
+			}else if(Figure::mode == CHASE){
+				image = normalImage;
+				aim.setX(p.position.x());
+				aim.setY(p.position.y());
+				if(findPathLength(position.x(), position.y()) > 8*30){
+					aim.setX(p.position.x());
+					aim.setY(p.position.y());
+					//std::cout << "-----------------------------" <<  std::endl;
+				}else{
+					aim.setX(0);
+					aim.setY(800);
+				}
+				
+			}else if(Figure::mode == FRIGHTENED){
+				srand(time(NULL));
+				flickingGhost();
+				//image = frightenedGhost;
+				aim.setX(rand() % 600 + 1);
+				aim.setY(rand() % 600 + 1);
+				
 			}
 			choosePath(boardTable);
-		}else if(mode == FRIGHTENED){
-			image = frightenedGhost;
+		}else if(mode !=FRIGHTENED){
+			image = normalImage;
 		}
 		
 	//	std::cout << "Clyde dir " << dir << std::endl;

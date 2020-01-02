@@ -16,6 +16,9 @@ private:
 	
 	
 public:
+	
+	
+	
 	LCDScore(int score, const QString &name, QWidget * parent = 0) : QWidget(parent){
 		num = score;
 		lcd = new QLCDNumber(3);
@@ -42,6 +45,17 @@ public:
 		
 	};
 	
+	int getNum(){
+		return num;
+	};
+	
+	void setNum(int n){
+		num = n;
+		lcd->display(num);
+		update();
+	};
+	
+	
 	
 public slots:
 	void changeValue(int value){
@@ -49,6 +63,9 @@ public slots:
 		lcd -> display(num);
 	};
 	
-	
+	void takeLive(){
+		num--;
+		lcd->display(num);
+	};
 	
 };
