@@ -3,7 +3,7 @@
 #include <QPalette>
 #include <QTimer>
 #include <QPen>
-#include <QThread>
+
 
 
 
