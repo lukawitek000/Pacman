@@ -9,8 +9,8 @@
 class Inky : public Figure{
 	
 private:
-	QPoint aim;
-	
+	//QPoint aim;
+	/*
 	double findPathLength(int x, int y){
 		return (sqrt(pow(x-aim.x(), 2) + pow(y-aim.y(), 2)));
 	};
@@ -29,7 +29,7 @@ private:
 			dir = DOWN;
 		}
 	};
-	
+	*/
 	
 	void choosePath(int boardTable[30][30]){
 		double pathRight = 10000;
@@ -53,30 +53,9 @@ private:
 		findShortestPath(pathRight, pathLeft, pathUp, pathDown);
 		
 	};
-	/*
-	void selectMode(int *ghostTimer){
-		if(Figure::mode != FRIGHTENED){
-			if(*ghostTimer % 2700 < 700){
-				Figure::mode = SCATTER;
-			}else{
-				Figure::mode = CHASE;
-			}
-			if(*ghostTimer == 2700){
-				*ghostTimer = 0;
-			}
-		}else{
-			//ghostTimer--;
-			vulnerableCounter++;
-			if(vulnerableCounter == 500){
-				Figure::mode = SCATTER;
-				vulnerableCounter = 0;
-				*ghostTimer = 0;
-			}
-		}
+	
 		
 		
-	};
-	*/
 	
 	
 	
@@ -109,11 +88,11 @@ public:
 		
 		if(!getOutFromHome()){
 			if(Figure::mode == SCATTER){
-				image = normalImage;
+				//image = normalImage;
 				aim.setX(600);
 				aim.setY(800);
 			}else if(Figure::mode == CHASE){
-				image = normalImage;
+				//image = normalImage;
 				int x1 = 0;
 				int y1 = 0;
 				if(p.dir == RIGHT){
@@ -148,13 +127,17 @@ public:
 				}else{
 					image = frightenedGhost;
 				}*/
-				flickingGhost();
+				
 				aim.setX(rand() % 600 + 1);
 				aim.setY(rand() % 600 + 1);
 			}
 			choosePath(boardTable);
-		}else if(mode !=FRIGHTENED){
+		}
+		
+		if(mode !=FRIGHTENED){
 			image = normalImage;
+		}else{
+			flickingGhost();
 		}
 		
 		

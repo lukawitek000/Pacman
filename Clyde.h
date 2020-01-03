@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+
 #include <stdlib.h>
 #include <time.h>
 // go to point x = 20*30 , y = 0
@@ -9,8 +9,8 @@
 class Clyde : public Figure{
 	
 private:
-	QPoint aim;
-	
+	//QPoint aim;
+	/*
 	double findPathLength(int x, int y){
 		return (sqrt(pow(x-aim.x(), 2) + pow(y-aim.y(), 2)));
 	};
@@ -29,7 +29,7 @@ private:
 			dir = DOWN;
 		}
 	};
-	
+	*/
 	
 	void choosePath(int boardTable[30][30]){
 		double pathRight = 10000;
@@ -113,9 +113,9 @@ public:
 			if(Figure::mode == SCATTER){
 				aim.setX(0);
 				aim.setY(800);
-				image = normalImage;
+				//image = normalImage;
 			}else if(Figure::mode == CHASE){
-				image = normalImage;
+				//image = normalImage;
 				aim.setX(p.position.x());
 				aim.setY(p.position.y());
 				if(findPathLength(position.x(), position.y()) > 8*30){
@@ -129,15 +129,19 @@ public:
 				
 			}else if(Figure::mode == FRIGHTENED){
 				srand(time(NULL));
-				flickingGhost();
+				
 				//image = frightenedGhost;
 				aim.setX(rand() % 600 + 1);
 				aim.setY(rand() % 600 + 1);
 				
 			}
 			choosePath(boardTable);
-		}else if(mode !=FRIGHTENED){
+		}
+		
+		if(mode !=FRIGHTENED){
 			image = normalImage;
+		}else{
+			flickingGhost();
 		}
 		
 	//	std::cout << "Clyde dir " << dir << std::endl;

@@ -21,7 +21,7 @@ public:
 	
 	LCDScore(int score, const QString &name, QWidget * parent = 0) : QWidget(parent){
 		num = score;
-		lcd = new QLCDNumber(3);
+		lcd = new QLCDNumber(4);
 		lcd->setSegmentStyle(QLCDNumber::Filled);
 		//lcd -> setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 		lcd -> setMinimumHeight(100);

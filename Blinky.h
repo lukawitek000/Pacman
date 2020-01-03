@@ -11,26 +11,9 @@
 class Blinky : public Figure{
 	
 private:
-	QPoint aim;
+	//QPoint aim;
 	
-	double findPathLength(int x, int y){
-		return (sqrt(pow(x-aim.x(), 2) + pow(y-aim.y(), 2)));
-	};
 	
-	void findShortestPath(double pathRight, double pathLeft, double pathUp, double pathDown){
-		
-		if(pathRight < pathLeft && pathRight < pathUp && pathRight < pathDown){
-			dir = RIGHT;
-		}
-		else if(pathLeft < pathRight && pathLeft < pathUp && pathLeft < pathDown){
-			dir = LEFT;
-		}
-		else if(pathUp < pathRight && pathUp < pathLeft && pathUp < pathDown){
-			dir = UP;
-		}else if(pathDown < pathRight && pathDown < pathLeft && pathDown < pathUp){
-			dir = DOWN;
-		}
-	};
 	
 	
 	void choosePath(int boardTable[30][30]){
@@ -86,26 +69,31 @@ public:
 		
 		if(!getOutFromHome()){
 			if(Figure::mode == SCATTER){
-				image = normalImage;
+				//image = normalImage;
 				aim.setX(600);
 				aim.setY(0);
 			}else if(Figure::mode == CHASE){
-				image = normalImage;
+				//image = normalImage;
 				aim.setX(p.position.x());
 				aim.setY(p.position.y());
 				//choosePath(boardTable);
 			}else if(Figure::mode == FRIGHTENED){
 				
 				srand(time(NULL));
-				flickingGhost();
+				
 				//image = frightenedGhost;
 				aim.setX(rand() % 600 + 1);
 				aim.setY(rand() % 600 + 1);
 				
 			}
 			choosePath(boardTable);
-		}else if(mode !=FRIGHTENED){
+		}
+		
+		if(mode !=FRIGHTENED){
 			image = normalImage;
+		}else{
+			flickingGhost();
+			
 		}
 		//std::cout << "binky dir " << dir << std::endl;
 		if(dir == RIGHT){

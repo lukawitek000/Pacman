@@ -13,7 +13,7 @@
 
 #include <QElapsedTimer>
 
-
+#include <cmath>
 #include <stdlib.h>
 #include <time.h>
 
@@ -50,7 +50,7 @@ protected:
 	int size = 30;
 	QImage normalImage;
 	
-	
+	QPoint aim;
 	
 	bool getOutFromHome(){
 		srand(time(NULL));
@@ -93,7 +93,44 @@ protected:
 		}
 	};
 	
+	double findPathLength(int x, int y){
+		return (sqrt(pow(x-aim.x(), 2) + pow(y-aim.y(), 2)));
+	};
 	
+	void findShortestPath(double pathRight, double pathLeft, double pathUp, double pathDown){
+		
+		if(pathRight < pathLeft && pathRight < pathUp && pathRight < pathDown){
+			dir = RIGHT;
+		}
+		else if(pathLeft < pathRight && pathLeft < pathUp && pathLeft < pathDown){
+			dir = LEFT;
+		}
+		else if(pathUp < pathRight && pathUp < pathLeft && pathUp < pathDown){
+			dir = UP;
+		}else if(pathDown < pathRight && pathDown < pathLeft && pathDown < pathUp){
+			dir = DOWN;
+		}else{
+			srand(time(NULL));
+			int randomDir = rand() % 4;
+			switch(randomDir){
+				case 0:
+					dir = RIGHT;
+					break;
+				case 1:
+					dir = LEFT;
+					break;
+				case 2:
+					dir = UP;
+					break;
+				case 3:
+					dir = DOWN;
+					break;
+				default:
+					dir = RIGHT;
+					break;
+			}
+		}
+	};
 	
 	void selectMode(int *ghostTimer);
 	

@@ -203,11 +203,12 @@ void GameBoard::movePacman(){
 	
 	if(snacks.isEmpty()){
 		win = true;
+		init();
 	}
 	
 	if(player ->FigureRect.intersects(blinky->FigureRect) || player ->FigureRect.intersects(inky->FigureRect) || player ->FigureRect.intersects(clyde->FigureRect) || player ->FigureRect.intersects(pinky->FigureRect)){
 		if(Figure::mode != FRIGHTENED){
-			//gameOver = true;
+			
 			emit die();
 			init();
 			
@@ -278,7 +279,7 @@ void GameBoard::paintEvent(QPaintEvent* /*event*/){
 			painter.setFont(font);
 			if(gameOver){
 				painter.drawText(250, 385, "GAME OVER!");
-			}else{
+			}else if (!win){
 				painter.drawText(300, 385, "READY!");
 				
 			}
@@ -296,6 +297,7 @@ void GameBoard::paintEvent(QPaintEvent* /*event*/){
 			//font.setFamily("");
 			painter.setFont(font);
 			painter.drawText(310, 385, "WIN!");
+			//init();
 		}
 		
 		
@@ -308,7 +310,7 @@ void GameBoard::paintEvent(QPaintEvent* /*event*/){
 void GameBoard::keyPressEvent(QKeyEvent *event){
 	//std::cout << "keyerevent" << std::endl;
 	dead = false;
-	if(!gameOver && !win){
+	if(!(gameOver || win)){
 		timer->start(speed);
 	}
 	//timerCount = 0;

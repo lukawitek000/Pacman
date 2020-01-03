@@ -9,8 +9,8 @@
 class Pinky : public Figure{
 	
 private:
-	QPoint aim;
-	
+	//QPoint aim;
+	/*
 	double findPathLength(int x, int y){
 		return (sqrt(pow(x-aim.x(), 2) + pow(y-aim.y(), 2)));
 	};
@@ -29,7 +29,7 @@ private:
 			dir = DOWN;
 		}
 	};
-	
+	*/
 	
 	void choosePath(int boardTable[30][30]){
 		double pathRight = 10000;
@@ -86,11 +86,11 @@ public:
 		
 		if(!getOutFromHome()){
 			if(Figure::mode == SCATTER){
-				image = normalImage;
+				//image = normalImage;
 				aim.setX(10);
 				aim.setY(10);			
 			}else if(Figure::mode == CHASE){
-				image = normalImage;
+				//image = normalImage;
 				if(p.dir == RIGHT){
 					aim.setX(p.position.x() + 4*30);
 					aim.setY(p.position.y());
@@ -107,7 +107,7 @@ public:
 				
 				
 			}else if(Figure::mode == FRIGHTENED){
-				flickingGhost();
+				
 				//image = frightenedGhost;
 				srand(time(NULL));
 				aim.setX(rand() % 600 + 1);
@@ -116,8 +116,12 @@ public:
 			}
 			
 			choosePath(boardTable);
-		}else if(mode !=FRIGHTENED){
+		}
+		
+		if(mode !=FRIGHTENED){
 			image = normalImage;
+		}else{
+			flickingGhost();
 		}
 		
 		
