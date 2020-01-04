@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_GameBoard_t {
     QByteArrayData data[7];
-    char stringdata0[50];
+    char stringdata0[44];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -36,12 +36,12 @@ QT_MOC_LITERAL(1, 10, 7), // "timeout"
 QT_MOC_LITERAL(2, 18, 0), // ""
 QT_MOC_LITERAL(3, 19, 7), // "collect"
 QT_MOC_LITERAL(4, 27, 3), // "die"
-QT_MOC_LITERAL(5, 31, 10), // "movePacman"
-QT_MOC_LITERAL(6, 42, 7) // "newGame"
+QT_MOC_LITERAL(5, 31, 4), // "move"
+QT_MOC_LITERAL(6, 36, 7) // "newGame"
 
     },
-    "GameBoard\0timeout\0\0collect\0die\0"
-    "movePacman\0newGame"
+    "GameBoard\0timeout\0\0collect\0die\0move\0"
+    "newGame"
 };
 #undef QT_MOC_LITERAL
 
@@ -88,7 +88,7 @@ void GameBoard::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 0: _t->timeout(); break;
         case 1: _t->collect((*reinterpret_cast< int(*)>(_a[1]))); break;
         case 2: _t->die(); break;
-        case 3: _t->movePacman(); break;
+        case 3: _t->move(); break;
         case 4: _t->newGame(); break;
         default: ;
         }

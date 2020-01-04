@@ -19,53 +19,17 @@ public:
 	
 	
 	
-	LCDScore(int score, const QString &name, QWidget * parent = 0) : QWidget(parent){
-		num = score;
-		lcd = new QLCDNumber(4);
-		lcd->setSegmentStyle(QLCDNumber::Filled);
-		//lcd -> setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
-		lcd -> setMinimumHeight(100);
-		lcd->display(score);
-		lcd -> setStyleSheet("border: 0px; color: white");
-		//lcd -> setStyleSheet("font-size: 50px");
-		
-		
-		label = new QLabel;
-		label -> setAlignment(Qt::AlignHCenter | Qt::AlignTop);
-		//label -> setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-		label ->setText(name);
-		//label ->setStyleSheet("{color: #C0BBFE}");
-		label -> setStyleSheet("color : #FF00FF");
-		
-		QVBoxLayout *layout = new QVBoxLayout;
-		layout->addWidget(lcd);
-		layout->addWidget(label);
-		setLayout(layout);
-		
-		
-	};
+	LCDScore(int score, const QString &name, QWidget * parent = 0);
 	
-	int getNum(){
-		return num;
-	};
+	int getNum();
 	
-	void setNum(int n){
-		num = n;
-		lcd->display(num);
-		update();
-	};
+	void setNum(int n);
 	
 	
 	
 public slots:
-	void changeValue(int value){
-		num += value;
-		lcd -> display(num);
-	};
+	void changeValue(int value);
 	
-	void takeLive(){
-		num--;
-		lcd->display(num);
-	};
+	void takeLive();
 	
 };

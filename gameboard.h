@@ -13,27 +13,21 @@
 
 
 
-#define BOARD_WIDTH 23
-#define BOARD_HEIGHT 22
-#define SIZE_OF_SIGNLE_ELEMENT 30
-#define WIDTH_OF_WINDOW 30*23
-#define HEIGHT_OF_WINDOW 22*30 + 100
-
-
-
-
+#include "Wall.h" 
+#include "Gate.h"
 #include "Figure.h"
 #include "Player.h"
-#include "Wall.h" 
+
 #include "snack.h"
 #include "superSnack.h" 
 #include "lcdScore.h"
-#include "Gate.h"
+
 
 #include "Blinky.h"
 #include "Inky.h"
 #include "Clyde.h" 
 #include "Pinky.h"
+//class GameBoard;
 
 
 
@@ -42,6 +36,24 @@ class GameBoard : public QWidget{
 	Q_OBJECT
 	
 private: 
+	
+	
+	void readTheBoard();
+	void createButtons();
+	void createLCDDisplays();
+	void createLayout();
+	void createBackground();
+	
+	void eatingSnacks();
+	void checkIfPlayerWon();
+	
+	
+	void paintText(QPainter &painter);
+	
+	void getDirectionForPlayer(QKeyEvent *event);
+	void checkContactPlayerWithGhost();
+	void movingOfFigures();
+	
 	Blinky *blinky;
 	Inky *inky;
 	Clyde *clyde;
@@ -58,12 +70,15 @@ private:
 	
 	
 	
-	QVector<Wall*> walls;
+	
 	QVector<Snack*> snacks;
-	QVector<SuperSnack*> superSnacks;   
+	static QVector<Wall*> walls; 
+	
+	
+	
+	
 	Gate *gate;
-	int w; 
-	int h;
+	
 	int timerCount; 
 	
 	bool gameOver;
@@ -74,7 +89,7 @@ private:
 	
 	QTimer *timer;
 	
-	int speed = 10;
+	int speed = 9 	;
 	
 	LCDScore * score;  
 	LCDScore * lives;
@@ -82,20 +97,32 @@ private:
 	QImage board;
 	QGridLayout *gridLayout;
 	QGridLayout *layout;
+	QGridLayout *buttonLayout;
 	
 	void init();
 	 
 private slots:
-	void movePacman(); 
+	void move(); 
 	void newGame();  
 	
 	 
 	
 public: 
-	int boardTable[30][30];
+	const static int sizeOfTile = 30; 
+	const static int heightOfLCD = 140;
+	//static int h;
+	
+	
+	
 	
 	GameBoard(QWidget *parent  = 0);
 	
+	static int sizeOfWalls(){
+		return walls.size();
+	}
+	static Wall * getWall(int i){
+		return walls[i];
+	}
 	
 protected:  
 	

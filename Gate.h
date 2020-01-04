@@ -1,12 +1,11 @@
 #pragma once
-
+#include "Wall.h"
 
 class Gate : public Wall{
+private:
+	const static int highOfGate;
 	
 public:
-	Gate(int x, int y, QWidget * parent=0): Wall(parent){
-		wallRect = QRect(x, y, 30, 10);
-		color = Qt::gray;
-	};
+	Gate(int x, int y, QWidget * parent=0);
 	
 };

@@ -50,15 +50,29 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = Figure.cpp \
+SOURCES       = Blinky.cpp \
+		Clyde.cpp \
+		Figure.cpp \
 		gameboard.cpp \
+		Gate.cpp \
+		Inky.cpp \
+		lcdScore.cpp \
 		Pacman.cpp \
-		Player.cpp moc_gameboard.cpp \
+		Pinky.cpp \
+		Player.cpp \
+		Wall.cpp moc_gameboard.cpp \
 		moc_lcdScore.cpp
-OBJECTS       = Figure.o \
+OBJECTS       = Blinky.o \
+		Clyde.o \
+		Figure.o \
 		gameboard.o \
+		Gate.o \
+		Inky.o \
+		lcdScore.o \
 		Pacman.o \
+		Pinky.o \
 		Player.o \
+		Wall.o \
 		moc_gameboard.o \
 		moc_lcdScore.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -147,10 +161,17 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		Player.h \
 		snack.h \
 		superSnack.h \
-		Wall.h Figure.cpp \
+		Wall.h Blinky.cpp \
+		Clyde.cpp \
+		Figure.cpp \
 		gameboard.cpp \
+		Gate.cpp \
+		Inky.cpp \
+		lcdScore.cpp \
 		Pacman.cpp \
-		Player.cpp
+		Pinky.cpp \
+		Player.cpp \
+		Wall.cpp
 QMAKE_TARGET  = pacman
 DESTDIR       = 
 TARGET        = pacman
@@ -333,7 +354,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents Blinky.h Board.h Clyde.h Figure.h gameboard.h Gate.h ghost.h Inky.h lcdScore.h Pinky.h Player.h snack.h superSnack.h Wall.h $(DISTDIR)/
-	$(COPY_FILE) --parents Figure.cpp gameboard.cpp Pacman.cpp Player.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Blinky.cpp Clyde.cpp Figure.cpp gameboard.cpp Gate.cpp Inky.cpp lcdScore.cpp Pacman.cpp Pinky.cpp Player.cpp Wall.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -368,13 +389,13 @@ moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 compiler_moc_header_make_all: moc_gameboard.cpp moc_lcdScore.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_gameboard.cpp moc_lcdScore.cpp
-moc_gameboard.cpp: Figure.h \
+moc_gameboard.cpp: Wall.h \
+		Gate.h \
+		Figure.h \
 		Player.h \
-		Wall.h \
 		snack.h \
 		superSnack.h \
 		lcdScore.h \
-		Gate.h \
 		Blinky.h \
 		Inky.h \
 		Clyde.h \
@@ -403,50 +424,148 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 
 ####### Compile
 
-Figure.o: Figure.cpp Figure.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Figure.o Figure.cpp
-
-gameboard.o: gameboard.cpp gameboard.h \
-		Figure.h \
+Blinky.o: Blinky.cpp Figure.h \
 		Player.h \
+		Blinky.h \
+		gameboard.h \
 		Wall.h \
+		Gate.h \
 		snack.h \
 		superSnack.h \
 		lcdScore.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Blinky.o Blinky.cpp
+
+Clyde.o: Clyde.cpp Figure.h \
+		Player.h \
+		Clyde.h \
+		gameboard.h \
+		Wall.h \
 		Gate.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Blinky.h \
+		Inky.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Clyde.o Clyde.cpp
+
+Figure.o: Figure.cpp Figure.h \
+		gameboard.h \
+		Wall.h \
+		Gate.h \
+		Player.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Figure.o Figure.cpp
+
+gameboard.o: gameboard.cpp gameboard.h \
+		Wall.h \
+		Gate.h \
+		Figure.h \
+		Player.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
 		Blinky.h \
 		Inky.h \
 		Clyde.h \
 		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gameboard.o gameboard.cpp
 
-Pacman.o: Pacman.cpp gameboard.h \
+Gate.o: Gate.cpp Gate.h \
+		Wall.h \
+		gameboard.h \
 		Figure.h \
 		Player.h \
-		Wall.h \
 		snack.h \
 		superSnack.h \
 		lcdScore.h \
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Gate.o Gate.cpp
+
+Inky.o: Inky.cpp Figure.h \
+		Player.h \
+		Blinky.h \
+		Inky.h \
+		gameboard.h \
+		Wall.h \
 		Gate.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Clyde.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Inky.o Inky.cpp
+
+lcdScore.o: lcdScore.cpp lcdScore.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lcdScore.o lcdScore.cpp
+
+Pacman.o: Pacman.cpp gameboard.h \
+		Wall.h \
+		Gate.h \
+		Figure.h \
+		Player.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
 		Blinky.h \
 		Inky.h \
 		Clyde.h \
 		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o Pacman.cpp
 
-Player.o: Player.cpp gameboard.h \
-		Figure.h \
+Pinky.o: Pinky.cpp Figure.h \
 		Player.h \
+		Pinky.h \
+		gameboard.h \
 		Wall.h \
+		Gate.h \
 		snack.h \
 		superSnack.h \
 		lcdScore.h \
+		Blinky.h \
+		Inky.h \
+		Clyde.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pinky.o Pinky.cpp
+
+Player.o: Player.cpp Figure.h \
+		Player.h \
+		gameboard.h \
+		Wall.h \
 		Gate.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
 		Blinky.h \
 		Inky.h \
 		Clyde.h \
 		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Player.o Player.cpp
+
+Wall.o: Wall.cpp Wall.h \
+		gameboard.h \
+		Gate.h \
+		Figure.h \
+		Player.h \
+		snack.h \
+		superSnack.h \
+		lcdScore.h \
+		Blinky.h \
+		Inky.h \
+		Clyde.h \
+		Pinky.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Wall.o Wall.cpp
 
 moc_gameboard.o: moc_gameboard.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gameboard.o moc_gameboard.cpp

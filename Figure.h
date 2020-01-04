@@ -32,10 +32,11 @@ enum Mode{
 	
 	
 };
-
+//class GameBoard; 	
 
 class Figure : public QWidget{
-	
+private:
+	bool checkIntersection(int i, QRect temp);
 protected:
 	 
 	
@@ -47,7 +48,7 @@ protected:
 	QImage initImage;
 	
 	
-	int size = 30;
+	//int size = 30;
 	QImage normalImage;
 	
 	QPoint aim;
@@ -149,15 +150,15 @@ public:
 	Figure(QWidget * parent = 0) : QWidget(parent){};
 	
 	
-	void move(int * timerCount, int boardTable[30][30]);
+	void move(int * timerCount);
 	void paintFigure(QPainter &painter);
 	
-	bool canMoveRight(int boardTable[30][30]);
+	bool canMoveRight();
 	
-	bool canMoveLeft(int boardTable[30][30]);
+	bool canMoveLeft();
 	
-	bool canMoveUp(int boardTable[30][30]);
-	bool canMoveDown(int boardTable[30][30]);
+	bool canMoveUp();
+	bool canMoveDown();
 	
 	void moveToInitPosition(){
 		position = initPosition;

@@ -11,6 +11,7 @@ public:
 	SuperSnack(int x, int y, QWidget* parent = 0) : Snack(parent){
 		snackRect = QRect(x+10, y+10, 10, 10);
 		isSuperSnack = true;
+		isVisible = true;
 		//std::cout << " creating superSnack" << std::endl;
 	};
 };

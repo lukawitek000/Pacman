@@ -1,39 +1,69 @@
 #include "Figure.h"
+#include "gameboard.h"
 
 Mode Figure::mode;
 int Figure::vulnerableCounter = 0;;
 
 
-bool Figure::canMoveRight(int boardTable[30][30]){
-	if(boardTable[(position.x() + FigureRect.width())/30][position.y()/30] == 1 || boardTable[(position.x() + FigureRect.width())/30][(position.y()+FigureRect.height()-step)/30] == 1)
-		return false;
+
+
+bool Figure::canMoveRight(){
+	QRect temp(FigureRect);
+	temp.moveTo(position.x() + step, position.y());
+	for(int i=0; i<GameBoard::sizeOfWalls(); i++){
+		if(checkIntersection(i, temp)){
+		 return false;
+		}
+		
+	}
 	return true;
+}
+
+bool Figure::canMoveLeft(){
+	QRect temp(FigureRect);
+	temp.moveTo(position.x() - step, position.y());
+	for(int i=0; i<GameBoard::sizeOfWalls(); i++){
+		if(checkIntersection(i, temp)){
+		 return false;
+		}
+		
+	}
+	return true;
+}
+bool Figure::canMoveUp(){
+	QRect temp(FigureRect);
+	temp.moveTo(position.x(), position.y()-step);
+	for(int i=0; i<GameBoard::sizeOfWalls(); i++){
+		if(!(GameBoard::getWall(i)->isGate)){
+			if(checkIntersection(i, temp)){
+				return false;
+			}
+		}
+		
+	}
+	return true;
+}
+bool Figure::canMoveDown(){
+	QRect temp(FigureRect);
+	temp.moveTo(position.x() , position.y()+ step);
+	for(int i=0; i<GameBoard::sizeOfWalls(); i++){
+		if(checkIntersection(i, temp)){
+		 return false;
+		}
+		
+	}
+	return true;
+}
+
+bool Figure::checkIntersection(int i, QRect temp){
+	if(temp.intersects(GameBoard::getWall(i)->wallRect)){
+		return true;
+	}
+	return false;
 	
-};
+}
 
 
-bool Figure::canMoveLeft(int boardTable[30][30]){
-	if(boardTable[(position.x()-step)/30][position.y()/30] == 1 || boardTable[(position.x()-step)/30][(position.y()+FigureRect.height()-step)/30] == 1) //dlaczego tu musi być -5 czyli -step a w move right nie????
-		return false;
-	return true;
-};
-
-
-
-bool Figure::canMoveUp(int boardTable[30][30]){
-	if(boardTable[position.x()/30][(position.y()-step)/30] == 1 || boardTable[(position.x()+FigureRect.width()-step)/30][(position.y()-step)/30] == 1)
-		return false;
-	return true;
-};
-
-bool Figure::canMoveDown(int boardTable[30][30]){
-	if(boardTable[position.x()/30][(position.y()+FigureRect.height())/30] == 1 || boardTable[(position.x() + FigureRect.width()-step)/30][(position.y()+FigureRect.height())/30] == 1 || boardTable[position.x()/30][(position.y()+FigureRect.height())/30] == 10 || boardTable[(position.x() + FigureRect.width()-step)/30][(position.y()+FigureRect.height())/30] == 10)
-		return false;
-	return true;
-	
-	
-};
- 
 
 void Figure::paintFigure(QPainter &painter){
 		painter.setPen(Qt::NoPen);
