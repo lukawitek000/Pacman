@@ -55,6 +55,7 @@ SOURCES       = Blinky.cpp \
 		Figure.cpp \
 		gameboard.cpp \
 		Gate.cpp \
+		ghost.cpp \
 		Inky.cpp \
 		lcdScore.cpp \
 		Pacman.cpp \
@@ -67,6 +68,7 @@ OBJECTS       = Blinky.o \
 		Figure.o \
 		gameboard.o \
 		Gate.o \
+		ghost.o \
 		Inky.o \
 		lcdScore.o \
 		Pacman.o \
@@ -166,6 +168,7 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		Figure.cpp \
 		gameboard.cpp \
 		Gate.cpp \
+		ghost.cpp \
 		Inky.cpp \
 		lcdScore.cpp \
 		Pacman.cpp \
@@ -354,7 +357,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents Blinky.h Board.h Clyde.h Figure.h gameboard.h Gate.h ghost.h Inky.h lcdScore.h Pinky.h Player.h snack.h superSnack.h Wall.h $(DISTDIR)/
-	$(COPY_FILE) --parents Blinky.cpp Clyde.cpp Figure.cpp gameboard.cpp Gate.cpp Inky.cpp lcdScore.cpp Pacman.cpp Pinky.cpp Player.cpp Wall.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Blinky.cpp Clyde.cpp Figure.cpp gameboard.cpp Gate.cpp ghost.cpp Inky.cpp lcdScore.cpp Pacman.cpp Pinky.cpp Player.cpp Wall.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -392,6 +395,7 @@ compiler_moc_header_clean:
 moc_gameboard.cpp: Wall.h \
 		Gate.h \
 		Figure.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \
@@ -425,6 +429,7 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean
 ####### Compile
 
 Blinky.o: Blinky.cpp Figure.h \
+		ghost.h \
 		Player.h \
 		Blinky.h \
 		gameboard.h \
@@ -439,6 +444,7 @@ Blinky.o: Blinky.cpp Figure.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Blinky.o Blinky.cpp
 
 Clyde.o: Clyde.cpp Figure.h \
+		ghost.h \
 		Player.h \
 		Clyde.h \
 		gameboard.h \
@@ -456,6 +462,7 @@ Figure.o: Figure.cpp Figure.h \
 		gameboard.h \
 		Wall.h \
 		Gate.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \
@@ -470,6 +477,7 @@ gameboard.o: gameboard.cpp gameboard.h \
 		Wall.h \
 		Gate.h \
 		Figure.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \
@@ -484,6 +492,7 @@ Gate.o: Gate.cpp Gate.h \
 		Wall.h \
 		gameboard.h \
 		Figure.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \
@@ -494,7 +503,12 @@ Gate.o: Gate.cpp Gate.h \
 		Pinky.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Gate.o Gate.cpp
 
+ghost.o: ghost.cpp ghost.h \
+		Figure.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ghost.o ghost.cpp
+
 Inky.o: Inky.cpp Figure.h \
+		ghost.h \
 		Player.h \
 		Blinky.h \
 		Inky.h \
@@ -515,6 +529,7 @@ Pacman.o: Pacman.cpp gameboard.h \
 		Wall.h \
 		Gate.h \
 		Figure.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \
@@ -526,6 +541,7 @@ Pacman.o: Pacman.cpp gameboard.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pacman.o Pacman.cpp
 
 Pinky.o: Pinky.cpp Figure.h \
+		ghost.h \
 		Player.h \
 		Pinky.h \
 		gameboard.h \
@@ -544,6 +560,7 @@ Player.o: Player.cpp Figure.h \
 		gameboard.h \
 		Wall.h \
 		Gate.h \
+		ghost.h \
 		snack.h \
 		superSnack.h \
 		lcdScore.h \
@@ -557,6 +574,7 @@ Wall.o: Wall.cpp Wall.h \
 		gameboard.h \
 		Gate.h \
 		Figure.h \
+		ghost.h \
 		Player.h \
 		snack.h \
 		superSnack.h \

@@ -32,6 +32,9 @@
 QVector<Wall*> GameBoard::walls; 
 const int GameBoard::sizeOfTile; 
 const int GameBoard::heightOfLCD;
+int GameBoard::timerCount;
+int GameBoard::ghostTimer;
+
 
 GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 	createBackground();
@@ -44,6 +47,8 @@ GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 	init();
 	setLayout(layout);
 	player->setFocus(); 
+	
+	
 } 
 
 
@@ -165,7 +170,7 @@ void GameBoard::init(){
 	clyde->moveToInitPosition();
 
 	
-	Figure::mode = SCATTER;
+	Ghost::mode = SCATTER;
 	ghostTimer = 0;
 	timerCount = 0;
 	
@@ -276,8 +281,8 @@ void GameBoard::eatingSnacks(){
 	for(int i = 0; i < snacks.size(); i++){
 		if(player->FigureRect.intersects(snacks[i]->snackRect) && snacks[i]->isVisible){
 			if(snacks[i]->isSuperSnack){
-				Figure::mode = FRIGHTENED;
-				Figure::vulnerableCounter = 0;
+				Ghost::mode = FRIGHTENED;
+				Ghost::vulnerableCounter = 0;
 				emit collect(POINT_FOR_SUPER_SNACK);
 			}else{
 				emit collect(POINT_FOR_NORMAL_SNACK); 
@@ -318,22 +323,26 @@ void GameBoard::checkIfPlayerWon(){
 
 void GameBoard::checkContactPlayerWithGhost(){
 	if(player ->FigureRect.intersects(blinky->FigureRect) || player ->FigureRect.intersects(inky->FigureRect) || player ->FigureRect.intersects(clyde->FigureRect) || player ->FigureRect.intersects(pinky->FigureRect)){
-		if(Figure::mode != FRIGHTENED){
+		if(Ghost::mode != FRIGHTENED){
 			emit die();
 			init();
 		}else{
 			emit collect(POINT_FOR_KILLING_GHOST);
 			if(player ->FigureRect.intersects(blinky->FigureRect)){
-				blinky->position = inky->initPosition;
+				//blinky->position = inky->initPosition;
+				blinky->moveCaughtGhostToHouse();
 			}
 			if(player ->FigureRect.intersects(inky->FigureRect)){
-				inky->position = inky->initPosition;
+				//inky->position = inky->initPosition;
+				inky->moveCaughtGhostToHouse();
 			}
 			if(player ->FigureRect.intersects(clyde->FigureRect)){
-				clyde->position = inky->initPosition;
+				//clyde->position = inky->initPosition;
+				clyde->moveCaughtGhostToHouse();
 			}
 			if(player ->FigureRect.intersects(pinky->FigureRect)){
-				pinky->position = inky->initPosition;
+				//pinky->position = inky->initPosition;
+				pinky->moveCaughtGhostToHouse();
 			}
 		}
 	}
@@ -342,14 +351,15 @@ void GameBoard::checkContactPlayerWithGhost(){
 
 void GameBoard::movingOfFigures(){
 	timerCount++; 
-	ghostTimer++;    
+	ghostTimer++;
+	Ghost::selectMode();
 	//std::cout << "timerCount = " << timerCount << std::endl;
-	player->move(&timerCount);
-	if(!(Figure::mode == FRIGHTENED && ghostTimer%HOW_TIMES_LOWER_SPEED_OF_FRIGHTENED_GHOSTS==0)){
-		blinky ->move(*player, &ghostTimer);
-		inky->move(*player, *blinky ,  &ghostTimer);
-		clyde ->move(*player,  &ghostTimer);
-		pinky->move(*player,  &ghostTimer);
+	player->move();
+	if(!(Ghost::mode == FRIGHTENED && ghostTimer%HOW_TIMES_LOWER_SPEED_OF_FRIGHTENED_GHOSTS==0)){
+		blinky ->move(*player);
+		inky->move(*player, *blinky);
+		clyde ->move(*player);
+		pinky->move(*player);
 	}
 	
 	

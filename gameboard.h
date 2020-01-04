@@ -16,6 +16,8 @@
 #include "Wall.h" 
 #include "Gate.h"
 #include "Figure.h"
+#include "ghost.h"
+
 #include "Player.h"
 
 #include "snack.h"
@@ -79,13 +81,13 @@ private:
 	
 	Gate *gate;
 	
-	int timerCount; 
+	
 	
 	bool gameOver;
 	bool win;
 	bool dead;
 	
-	int ghostTimer;
+	
 	
 	QTimer *timer;
 	
@@ -111,8 +113,8 @@ public:
 	const static int sizeOfTile = 30; 
 	const static int heightOfLCD = 140;
 	//static int h;
-	
-	
+	static int timerCount; 
+	static int ghostTimer;
 	
 	
 	GameBoard(QWidget *parent  = 0);

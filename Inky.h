@@ -6,29 +6,12 @@
 // go to point x = 20*30 , y = 0
 
 
-class Inky : public Figure{
+class Inky : public Ghost{
 	
 private:
-
-	
-	void choosePath();
-		
-		
-	
-	
-	
-	
+	void findAimInChaseMode(const Player &p, const Blinky &b);
 	
 public:
-	
-	
 	Inky(int x, int y, QWidget * parent = 0);
-	
-	
-
-	void move(const Player &p, const Blinky &b, int *ghostTimer);
-	
-	
-	
-	
+	void move(const Player &p, const Blinky &b);
 };

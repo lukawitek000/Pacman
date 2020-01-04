@@ -35,20 +35,15 @@ private:
 	QImage pacmanClosed;
 	
 	
-	void animation(int * timerCount);
+	void animation();
+	
+	void changePosition();
+	
+	
 public:
-	
+	enum direction nextDir;
 	Player(int x, int y,QWidget * parent = 0);
-	
-
-	
-	
-	
-	void move(int * timerCount);
-	
-
-
-	
+	void move();
 	
 };
 

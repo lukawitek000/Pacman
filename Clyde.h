@@ -6,17 +6,10 @@
 // go to point x = 20*30 , y = 0
 
 
-class Clyde : public Figure{
+class Clyde : public Ghost{
 	
 private:
-
-	
-	void choosePath();
-	
-	
-	
-	
-	
+	void findAimInChaseMode(const Player &p);
 	
 public:
 	
@@ -24,7 +17,7 @@ public:
 	
 	
 
-	void move(const Player &p, int *ghostTimer);
+	void move(const Player &p);
 	
 	
 	
