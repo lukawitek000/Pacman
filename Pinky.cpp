@@ -7,7 +7,7 @@
 
 
 Pinky::Pinky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
-	normalImage = QImage(QString("%1/pinky.png").arg(QCoreApplication::applicationDirPath()));
+	normalImage = QImage(QString("%1/img/pinky.png").arg(QCoreApplication::applicationDirPath()));
 	image = normalImage;
 	std::cout << "creating Pinky" << std::endl;
 	aim = QPoint(scatterXAim, scatterYAim);

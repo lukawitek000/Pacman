@@ -15,8 +15,8 @@ enum Mode{
 
 class Ghost:public Figure{
 protected:
-	QImage frightenedGhost = QImage(QString("%1/vulnerableGost.png").arg(QCoreApplication::applicationDirPath()));
-	QImage frightenedGhostWhite = QImage(QString("%1/vulnerableGhostWhite.png").arg(QCoreApplication::applicationDirPath()));
+	QImage frightenedGhost = QImage(QString("%1/img/vulnerableGost.png").arg(QCoreApplication::applicationDirPath()));
+	QImage frightenedGhostWhite = QImage(QString("%1/img/vulnerableGhostWhite.png").arg(QCoreApplication::applicationDirPath()));
 	QPoint aim;
 	
 	bool getOutFromHome();

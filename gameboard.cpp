@@ -91,7 +91,7 @@ void GameBoard::createButtons(){
 
 
 void GameBoard::createBackground(){
-	board = QImage(QString("%1/Board.png").arg(QCoreApplication::applicationDirPath()));
+	board = QImage(QString("%1/img/Board.png").arg(QCoreApplication::applicationDirPath()));
 	
 	QPalette pal = this->palette();
 	pal.setColor(QPalette::Window, Qt::black);

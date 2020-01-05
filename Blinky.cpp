@@ -7,7 +7,7 @@
 
 
 Blinky::Blinky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
-	normalImage = QImage(QString("%1/Blinky.png").arg(QCoreApplication::applicationDirPath()));
+	normalImage = QImage(QString("%1/img/Blinky.png").arg(QCoreApplication::applicationDirPath()));
 	image = normalImage;
 	std::cout << "creating Blinky" << std::endl;
 	aim = QPoint(scatterXAim, scatterYAim);

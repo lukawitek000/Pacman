@@ -11,8 +11,8 @@ int Player::playerTimer;
 
 Player::Player(int x, int y,QWidget * parent) : Figure(x, y, parent){
 	nextDir = RIGHT;
-	pacmanOpened = QImage(QString("%1/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
-	pacmanClosed = QImage(QString("%1/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
+	pacmanOpened = QImage(QString("%1/img/pacmanOpened.png").arg(QCoreApplication::applicationDirPath()));
+	pacmanClosed = QImage(QString("%1/img/pacmanClosed.png").arg(QCoreApplication::applicationDirPath()));
 	image = pacmanOpened;
 	std::cout << "creating player" << std::endl;
 	initImage = image;

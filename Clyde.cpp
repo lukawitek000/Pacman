@@ -8,7 +8,7 @@
 
 
 Clyde::Clyde(int x, int y, QWidget * parent) : Ghost(x, y, parent){
-	normalImage = QImage(QString("%1/Clyde.png").arg(QCoreApplication::applicationDirPath()));
+	normalImage = QImage(QString("%1/img/Clyde.png").arg(QCoreApplication::applicationDirPath()));
 	image = normalImage;
 	std::cout << "creating Clyde" << std::endl;
 	aim = QPoint(scatterXAim, scatterYAim);

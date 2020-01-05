@@ -7,7 +7,7 @@
 
 
 Inky::Inky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
-	normalImage = QImage(QString("%1/Inky.png").arg(QCoreApplication::applicationDirPath()));
+	normalImage = QImage(QString("%1/img/Inky.png").arg(QCoreApplication::applicationDirPath()));
 	image = normalImage;
 	std::cout << "creating Inky" << std::endl;
 	aim = QPoint(scatterXAim, scatterYAim);
