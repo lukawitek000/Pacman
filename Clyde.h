@@ -16,4 +16,6 @@ private:
 public:
 	Clyde(int x, int y, QWidget * parent = 0);
 	void move(const Player &p);
+	void move(const Player &/*p*/, const Ghost &/*b*/){};
 };
+

@@ -10,7 +10,8 @@
 #include <QPainter>
 #include <QVector>
 #include <QPushButton>
-
+#include <QMap>
+#include <QString>
 
 
 #include "Wall.h" 
@@ -51,12 +52,15 @@ private:
 	void init();
 	void paintEvent(QPaintEvent* /*event*/);
 	void keyPressEvent(QKeyEvent *event);
-	
+	/*
 	Blinky *blinky;
 	Inky *inky;
 	Clyde *clyde;
 	Pinky *pinky;
-	Player *player; 
+	*/
+	Player *player;
+	
+	QMap<QString, Ghost*> ghosts;
 	
 	QVector<Snack*> snacks;
 	static QVector<Wall*> walls; 
@@ -80,7 +84,29 @@ public:
 	
 	static int sizeOfWalls();
 	static Wall * getWall(int i);
-
+	/*
+	~GameBoard(){
+		//delete timer;
+		delete player;
+		delete score;
+		delete lives;
+		//delete gridLayout;
+		//delete layout;
+		//delete buttonLayout;
+		
+		for(int i=0; i<walls.size(); i++){
+			delete walls[i];
+		}
+		for(int i= 0; i<snacks.size(); i++){
+			delete snacks[i];
+		}
+		for(QMap<QString, Ghost*>::const_iterator it = ghosts.cbegin(), end = ghosts.cend(); it != end; ++it){
+			delete it.value();
+		}
+		
+		
+	};
+*/
 private slots:
 	void move(); 
 	void newGame();  
@@ -90,3 +116,4 @@ signals:
 	void collect(int);
 	void die();
 };
+

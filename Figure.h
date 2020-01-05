@@ -41,8 +41,9 @@ public:
 	QPoint position;
 	QRect FigureRect;
 	
+	Figure(QWidget * parent = 0):QWidget(parent){};
 	Figure(int x, int y, QWidget * parent = 0);
-	void move(int * timerCount);
+	//void move(int * timerCount);
 	void paintFigure(QPainter &painter);
 	bool canMoveRight();
 	bool canMoveLeft();
@@ -50,3 +51,4 @@ public:
 	bool canMoveDown();
 	void moveToInitPosition();
 };
+

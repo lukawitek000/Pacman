@@ -22,3 +22,4 @@ public slots:
 	void changeValue(int value);
 	void takeLive();
 };
+

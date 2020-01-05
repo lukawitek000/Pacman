@@ -37,3 +37,4 @@ void Blinky::findAimInChaseMode(const Player &p){
 	aim.setX(p.position.x());
 	aim.setY(p.position.y());
 }
+

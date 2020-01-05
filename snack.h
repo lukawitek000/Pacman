@@ -18,5 +18,5 @@ public:
 	Snack(QWidget* parent = 0):QWidget(parent){};
 	Snack(int x, int y, QWidget* parent = 0);
 	void paintSnack(QPainter &painter);
-
 };
+

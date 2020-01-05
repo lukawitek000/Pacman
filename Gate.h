@@ -7,3 +7,4 @@ private:
 public:
 	Gate(int x, int y, QWidget * parent=0);
 };
+

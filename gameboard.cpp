@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QPen>
 #include <QThread>
+using namespace std;
 
 
 #define POINT_FOR_NORMAL_SNACK 1
@@ -124,16 +125,31 @@ void GameBoard::readTheBoard(){
 				walls.push_back(gate);
 				gridLayout->addWidget(gate, y, x);
 			}else if(board.pixel(x, y) == BLINKY){
-				blinky = new Blinky(x*sizeOfTile, y*sizeOfTile);
+				
+				//blinky = new Blinky(x*sizeOfTile, y*sizeOfTile);
+				Ghost *blinky = new Blinky(x*sizeOfTile, y*sizeOfTile);
+				ghosts["blinky"] = blinky;
 				gridLayout -> addWidget(blinky, y, x);
+				
+				
 			}else if(board.pixel(x, y) == INKY){
-				inky = new Inky(x*sizeOfTile, y*sizeOfTile);
+				//inky = new Inky(x*sizeOfTile, y*sizeOfTile);
+				Ghost *inky = new Inky(x*sizeOfTile, y*sizeOfTile);
+				ghosts["inky"] = inky;
 				gridLayout -> addWidget(inky, y, x);
 			}else if(board.pixel(x,y) == CLYDE){
-				clyde = new Clyde(x*sizeOfTile, y*sizeOfTile);
+				//clyde = new Clyde(x*sizeOfTile, y*sizeOfTile);
+				
+				Ghost *clyde = new Clyde(x*sizeOfTile, y*sizeOfTile);
+				ghosts["clyde"] = clyde;
+				
 				gridLayout -> addWidget(clyde, y, x);
 			}else if(board.pixel(x, y) == PINKY){
-				pinky = new Pinky(x*sizeOfTile, y*sizeOfTile);
+				//pinky = new Pinky(x*sizeOfTile, y*sizeOfTile);
+				
+				Ghost *pinky = new Pinky(x*sizeOfTile, y*sizeOfTile);
+				ghosts["pinky"] = pinky;
+				
 				gridLayout -> addWidget(pinky, y, x);
 			}
 		}
@@ -150,11 +166,15 @@ void GameBoard::init(){
 		gameOver = false;
 	}
 	player->moveToInitPosition();
-	blinky->moveToInitPosition();
+	
+	for(QMap<QString, Ghost*>::const_iterator it = ghosts.cbegin(), end = ghosts.cend(); it != end; ++it){
+		it.value() -> moveToInitPosition();
+	}
+	/*blinky->moveToInitPosition();
 	pinky->moveToInitPosition();
 	inky->moveToInitPosition();
 	clyde->moveToInitPosition();
-	
+	*/
 	Ghost::mode = SCATTER;
 	Ghost::ghostTimer = 0;
 	Player::playerTimer = 0;
@@ -173,10 +193,16 @@ void GameBoard::paintEvent(QPaintEvent* /*event*/){
 		snacks[i]->paintSnack(painter);
 	}
 	player->paintFigure(painter);
+	
+	for(QMap<QString, Ghost*>::const_iterator it = ghosts.cbegin(), end = ghosts.cend(); it != end; ++it){
+		it.value() -> paintFigure(painter);
+	}
+	/*
 	blinky->paintFigure(painter);
 	inky->paintFigure(painter);  
 	clyde->paintFigure(painter); 
 	pinky->paintFigure(painter);
+	*/
 	if(dead){
 		paintText(painter);
 	}
@@ -280,7 +306,7 @@ void GameBoard::checkIfPlayerWon(){
 }
 
 
-void GameBoard::checkContactPlayerWithGhost(){
+void GameBoard::checkContactPlayerWithGhost(){/*
 	if(player ->FigureRect.intersects(blinky->FigureRect) || player ->FigureRect.intersects(inky->FigureRect) || player ->FigureRect.intersects(clyde->FigureRect) || player ->FigureRect.intersects(pinky->FigureRect)){
 		if(Ghost::mode != FRIGHTENED){
 			emit die();
@@ -304,8 +330,33 @@ void GameBoard::checkContactPlayerWithGhost(){
 				pinky->moveCaughtGhostToHouse();
 			}
 		}
+	}*/
+	
+	for(QMap<QString, Ghost*>::const_iterator it = ghosts.cbegin(), end = ghosts.cend(); it != end; ++it){
+		if(player ->FigureRect.intersects(it.value()->FigureRect)){
+			if(Ghost::mode != FRIGHTENED){
+				emit die();
+				init();
+			}else{
+				emit collect(POINT_FOR_KILLING_GHOST);
+				it.value()->moveCaughtGhostToHouse();
+			}
+		}
 	}
+	
+	
+	
+	
+	
 }
+
+
+/*
+template<typename Base, typename InstanceType>
+inline bool instanceof(const InstanceType &instance){
+	return (dynamic_cast<Base *>(&instance) != NULL);
+}
+*/
 
 
 void GameBoard::movingOfFigures(){
@@ -314,10 +365,20 @@ void GameBoard::movingOfFigures(){
 	Ghost::selectMode();
 	player->move();
 	if(!(Ghost::mode == FRIGHTENED && Ghost::ghostTimer % HOW_TIMES_LOWER_SPEED_OF_FRIGHTENED_GHOSTS == 0)){
-		blinky ->move(*player);
+		
+		for(QMap<QString, Ghost*>::const_iterator it = ghosts.cbegin(), end = ghosts.cend(); it != end; ++it){
+			//if(instanceof<Inky>(&(it.value())))
+			if(dynamic_cast<Inky*>(it.value())){
+				it.value() -> move(*player, *ghosts["blinky"]);
+				//std::cout << "instance of Inky " << std::endl;
+			}else{
+				it.value() -> move(*player);
+			}
+		}
+		/*blinky ->move(*player);
 		inky->move(*player, *blinky);
 		clyde ->move(*player);
-		pinky->move(*player);
+		pinky->move(*player);*/
 	}
 }
 
@@ -354,6 +415,4 @@ void GameBoard::newGame(){
 	update();
 	player->setFocus();
 }
-
-
 

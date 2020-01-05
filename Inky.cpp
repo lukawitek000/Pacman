@@ -15,7 +15,8 @@ Inky::Inky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
 };
 
 
-void Inky::move(const Player &p, const Blinky &b){
+void Inky::move(const Player &p, const Ghost &b){
+	//std::cout << "inky move" << std::endl;
 	if(!getOutFromHome()){
 		if(Ghost::mode == SCATTER){
 			setScatterAim(scatterXAim, scatterYAim);
@@ -33,7 +34,7 @@ void Inky::move(const Player &p, const Blinky &b){
 };
 
 
-void Inky::findAimInChaseMode(const Player &p, const Blinky &b){
+void Inky::findAimInChaseMode(const Player &p, const Ghost &b){
 	int x1 = 0;
 	int y1 = 0;
 	if(p.dir == RIGHT){

@@ -7,3 +7,4 @@ Gate::Gate(int x, int y, QWidget * parent): Wall(parent){
 	color = Qt::gray;
 	isGate = true;
 };
+

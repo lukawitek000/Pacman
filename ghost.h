@@ -34,7 +34,10 @@ public:
 	static int vulnerableCounter;
 	static Mode mode;
 	
+	Ghost(QWidget *parent = 0):Figure(parent){};
 	Ghost(int x, int y, QWidget *parent = 0):Figure(x, y, parent){};
-	//virtual void move(const Player &p, int *ghostTimer, const Blinky *b = NULL) = 0;
+	virtual void move(const Player &p) = 0;
+	virtual void move(const Player &p, const Ghost &b) = 0;
 	void moveCaughtGhostToHouse();
 };
+

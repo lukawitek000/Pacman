@@ -14,3 +14,4 @@ void Wall::paintWall(QPainter &painter){
 	painter.setBrush(color);
 	painter.drawRect(wallRect);
 }
+

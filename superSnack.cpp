@@ -9,3 +9,4 @@ SuperSnack::SuperSnack(int x, int y, QWidget* parent) : Snack(parent){
 	isVisible = true;
 	//std::cout << " creating superSnack" << std::endl;
 }
+

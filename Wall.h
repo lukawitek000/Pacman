@@ -14,3 +14,4 @@ public:
 	Wall(int x, int y , QWidget * parent=0);
 	void paintWall(QPainter &painter);
 };
+

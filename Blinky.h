@@ -14,6 +14,9 @@ private:
 	const static int scatterXAim = 600;
 	const static int scatterYAim = 0;
 public:
+	Blinky(QWidget *parent = 0):Ghost(parent){};
 	Blinky(int x, int y, QWidget * parent = 0);
 	void move(const Player &p);
+	void move(const Player &/*p*/, const Ghost &/*b*/){};
 };
+
