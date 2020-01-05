@@ -1,11 +1,14 @@
 #pragma once
-//#include "superSnack.h"
-//#include "normalSnack.h"
+
+#include <QWidget>
+#include <QRect>
+#include <QPainter>
+
+
 
 class Snack : public QWidget{
 private:
-	
-	
+	const static int sizeOfSnack = 4;
 	
 public:
 	QRect snackRect;
@@ -13,24 +16,7 @@ public:
 	bool isVisible;
 	
 	Snack(QWidget* parent = 0):QWidget(parent){};
-	
-	Snack(int x, int y, QWidget* parent = 0) :QWidget(parent){
-		snackRect = QRect(x+13, y+13, 4, 4);
-		isSuperSnack = false;
-		isVisible = true;
-	}
-	
-	
-	
-	
-	
-	void paintSnack(QPainter &painter){
-		if(isVisible){
-			painter.setPen(Qt::NoPen);
-			painter.setBrush(Qt::yellow);
-			painter.drawRect(snackRect);
-		}
-	};
+	Snack(int x, int y, QWidget* parent = 0);
+	void paintSnack(QPainter &painter);
 
-	
 };

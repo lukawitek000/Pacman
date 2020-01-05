@@ -10,15 +10,10 @@ class Clyde : public Ghost{
 	
 private:
 	void findAimInChaseMode(const Player &p);
-	
+	const static int scatterXAim = 0;
+	const static int scatterYAim = 800;
+	const static int safeDistanceFromPlayerInTiles = 8;
 public:
-	
 	Clyde(int x, int y, QWidget * parent = 0);
-	
-	
-
 	void move(const Player &p);
-	
-	
-	
 };

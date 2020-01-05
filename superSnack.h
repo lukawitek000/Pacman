@@ -1,17 +1,13 @@
 #pragma once
-
+#include "snack.h"
+#include <QWidget>
+#include <QRect>
+#include <QPainter>
 
 class SuperSnack : public Snack{
-	
-	
-	
+private:
+	const static int sizeOfSuperSnack = 10;
 	
 public:
-	//QRect snackRect;
-	SuperSnack(int x, int y, QWidget* parent = 0) : Snack(parent){
-		snackRect = QRect(x+10, y+10, 10, 10);
-		isSuperSnack = true;
-		isVisible = true;
-		//std::cout << " creating superSnack" << std::endl;
-	};
+	SuperSnack(int x, int y, QWidget* parent = 0);
 };

@@ -1,7 +1,6 @@
 #include "Gate.h"
 #include "gameboard.h"
 
-const int Gate::highOfGate = 10;
 
 Gate::Gate(int x, int y, QWidget * parent): Wall(parent){
 	wallRect = QRect(x, y, GameBoard::sizeOfTile, highOfGate);

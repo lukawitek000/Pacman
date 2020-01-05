@@ -9,15 +9,11 @@
 
 
 class Blinky : public Ghost{
-	
 private:
 	void findAimInChaseMode(const Player &p);
-
+	const static int scatterXAim = 600;
+	const static int scatterYAim = 0;
 public:
-	//Blinky(QWidget * parent = 0): Ghost(parent){};
-	
 	Blinky(int x, int y, QWidget * parent = 0);
-	
 	void move(const Player &p);
-
 };

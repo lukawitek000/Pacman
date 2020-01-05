@@ -14,22 +14,11 @@ private:
 	QLabel *label;
 	int num;
 	
-	
 public:
-	
-	
-	
 	LCDScore(int score, const QString &name, QWidget * parent = 0);
-	
 	int getNum();
-	
 	void setNum(int n);
-	
-	
-	
 public slots:
 	void changeValue(int value);
-	
 	void takeLive();
-	
 };

@@ -6,51 +6,34 @@
 
 
 
-	
-	
-	Blinky::Blinky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
-		normalImage = QImage(QString("%1/Blinky.png").arg(QCoreApplication::applicationDirPath()));
-		image = normalImage;
-		std::cout << "creating Blinky" << std::endl;
-		aim = QPoint(600, 0);
-		initImage = image;
-	};
-	
-	
+Blinky::Blinky(int x, int y, QWidget * parent) : Ghost(x, y, parent){
+	normalImage = QImage(QString("%1/Blinky.png").arg(QCoreApplication::applicationDirPath()));
+	image = normalImage;
+	std::cout << "creating Blinky" << std::endl;
+	aim = QPoint(scatterXAim, scatterYAim);
+	initImage = image;
+}
 
-	void Blinky::move(const Player &p){
-		
-		//selectMode();
-		
-		if(!getOutFromHome()){
-			if(Ghost::mode == SCATTER){
-				setScatterAim(600, 0);
-			}else if(Ghost::mode == CHASE){
-				findAimInChaseMode(p);
-			}else if(Ghost::mode == FRIGHTENED){
-				findRandomAim();
-				
-			}
-			choosePath();
+
+void Blinky::move(const Player &p){
+	if(!getOutFromHome()){
+		if(Ghost::mode == SCATTER){
+			setScatterAim(scatterXAim, scatterYAim);
+		}else if(Ghost::mode == CHASE){
+			findAimInChaseMode(p);
+		}else if(Ghost::mode == FRIGHTENED){
+			findRandomAim();
 		}
-		
-		setImage();
-		//std::cout << "binky dir " << dir << std::endl;
-		changePosition();
-		
-		teleportWhenFigureGoOutOfBoard();
-		
-		
-		FigureRect.moveTo(position);
-		
-		
-		
-		
-	};
-	void Blinky::findAimInChaseMode(const Player &p){
-		
-		//image = normalImage;
-				aim.setX(p.position.x());
-				aim.setY(p.position.y());
-				//choosePath(boardTable);
+		choosePath();
 	}
+		setImage();
+		changePosition();
+		teleportWhenFigureGoOutOfBoard();
+		FigureRect.moveTo(position);
+}
+
+
+void Blinky::findAimInChaseMode(const Player &p){
+	aim.setX(p.position.x());
+	aim.setY(p.position.y());
+}

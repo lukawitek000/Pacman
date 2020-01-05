@@ -4,29 +4,13 @@
 #include <QWidget>
 
 class Wall : public QWidget{
-	
-	//Q_OBJECT
-
-	
+protected:
+	QColor color;
 public:
 	bool isGate;
-	Wall(QWidget * parent = 0):QWidget(parent){};
-	
-	Wall(int x, int y , QWidget * parent=0);
-	
-	
-	void paintWall(QPainter &painter);
-
-	
-	
-	
-//private:
 	QRect wallRect;
-	QColor color;
-	//QRect wallRectColor;
 	
-	
-	
-	
-	
+	Wall(QWidget * parent = 0):QWidget(parent){};
+	Wall(int x, int y , QWidget * parent=0);
+	void paintWall(QPainter &painter);
 };

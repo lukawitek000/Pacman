@@ -32,12 +32,12 @@
 QVector<Wall*> GameBoard::walls; 
 const int GameBoard::sizeOfTile; 
 const int GameBoard::heightOfLCD;
-int GameBoard::timerCount;
-int GameBoard::ghostTimer;
+
 
 
 GameBoard::GameBoard(QWidget *parent): QWidget(parent){
 	createBackground();
+	
 	timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(move()));
 	
@@ -73,7 +73,6 @@ void GameBoard::createLCDDisplays(){
 }
 
 
-
 void GameBoard::createButtons(){
 	buttonLayout = new QGridLayout;
 	
@@ -88,7 +87,6 @@ void GameBoard::createButtons(){
 	buttonLayout->addWidget(quit, 0, 0);
 	buttonLayout -> addWidget(playAgain, 1, 0);
 }
-
 
 
 void GameBoard::createBackground(){
@@ -109,13 +107,10 @@ void GameBoard::readTheBoard(){
 			if(board.pixel(x, y) == PLAYER){
 				player = new Player(x*sizeOfTile, y*sizeOfTile);
 				gridLayout->addWidget(player, y, x);	
-				playerInit = player->position;
-				std::cout << "player add " << std::endl;
 			}else if(board.pixel(x, y) == WALL){
 				Wall * wall = new Wall(x*sizeOfTile, y*sizeOfTile);
 				walls.push_back(wall);
 				gridLayout -> addWidget(wall, y, x);
-				//std::cout << "wall add " << std::endl;
 			}else if(board.pixel(x, y) == SNACK){
 				Snack *snack = new Snack(x*sizeOfTile, y*sizeOfTile);
 				snacks.push_back(snack);
@@ -124,28 +119,22 @@ void GameBoard::readTheBoard(){
 				Snack * superSnack = new SuperSnack(x*sizeOfTile, y*sizeOfTile);
 				snacks.push_back(superSnack);
 				gridLayout->addWidget(superSnack, y, x);
-			}
-			else if(board.pixel(x, y) == GATE){
-				//blokadka
-				gate = new Gate(x*sizeOfTile, y*sizeOfTile);
+			}else if(board.pixel(x, y) == GATE){
+				Gate *gate = new Gate(x*sizeOfTile, y*sizeOfTile);
 				walls.push_back(gate);
 				gridLayout->addWidget(gate, y, x);
 			}else if(board.pixel(x, y) == BLINKY){
 				blinky = new Blinky(x*sizeOfTile, y*sizeOfTile);
 				gridLayout -> addWidget(blinky, y, x);
-				blinkyInit = blinky->position;
 			}else if(board.pixel(x, y) == INKY){
 				inky = new Inky(x*sizeOfTile, y*sizeOfTile);
 				gridLayout -> addWidget(inky, y, x);
-				inkyInit = inky->position;
 			}else if(board.pixel(x,y) == CLYDE){
 				clyde = new Clyde(x*sizeOfTile, y*sizeOfTile);
 				gridLayout -> addWidget(clyde, y, x);
-				clydeInit = clyde->position;
 			}else if(board.pixel(x, y) == PINKY){
 				pinky = new Pinky(x*sizeOfTile, y*sizeOfTile);
 				gridLayout -> addWidget(pinky, y, x);
-				pinkyInit = pinky->position;
 			}
 		}
 	}
@@ -155,42 +144,28 @@ void GameBoard::readTheBoard(){
 
 
 void GameBoard::init(){
-
 	if(lives->getNum() == 0){
 		gameOver = true;
 	}else{
 		gameOver = false;
 	}
-	
-	
 	player->moveToInitPosition();
 	blinky->moveToInitPosition();
 	pinky->moveToInitPosition();
 	inky->moveToInitPosition();
 	clyde->moveToInitPosition();
-
 	
 	Ghost::mode = SCATTER;
-	ghostTimer = 0;
-	timerCount = 0;
-	
+	Ghost::ghostTimer = 0;
+	Player::playerTimer = 0;
 	dead = true;
-	
 	win = false;
 	timer->stop();
-	
 }
 
 
-
-
-	
 void GameBoard::paintEvent(QPaintEvent* /*event*/){ 
-	
-	//std::cout << "mode = " << Figure::mode << std::endl;
-	
 	QPainter painter(this);
-	//std::cout << "draw here" << std::endl;
 	for(int i = 0; i<walls.size(); i++){
 		walls[i]->paintWall(painter);
 	}
@@ -202,12 +177,10 @@ void GameBoard::paintEvent(QPaintEvent* /*event*/){
 	inky->paintFigure(painter);  
 	clyde->paintFigure(painter); 
 	pinky->paintFigure(painter);
-	
 	if(dead){
 		paintText(painter);
 	}
-
-};
+}
 
 
 void GameBoard::paintText(QPainter &painter){
@@ -230,10 +203,7 @@ void GameBoard::paintText(QPainter &painter){
 }
 
 
- 
-
 void GameBoard::keyPressEvent(QKeyEvent *event){
-	//std::cout << "keyerevent" << std::endl;
 	if(dead){
 		QThread::msleep(DELAY_AT_THE_BEGINNING_IN_MS);
 	}
@@ -242,34 +212,35 @@ void GameBoard::keyPressEvent(QKeyEvent *event){
 		timer->start(speed);
 	}
 	getDirectionForPlayer(event);
-};
+}
+
 
 void GameBoard::getDirectionForPlayer(QKeyEvent *event){
 	if(event->key() == Qt::Key_Right){
 		if(player->canMoveRight()){
 			if(player->dir != RIGHT)
-				timerCount = 0;
+				Player::playerTimer = 0;
 			player->dir = RIGHT;
 		}
 		player->nextDir = RIGHT;
 	}else if(event->key() == Qt::Key_Left){
 		if(player->canMoveLeft()){
 			if(player->dir != LEFT)
-				timerCount = 0;
+				Player::playerTimer = 0;
 			player->dir = LEFT;
 		}
 		player->nextDir = LEFT;
 	}else if(event->key() == Qt::Key_Up){
 		if(player->canMoveUp()){
 			if(player->dir != UP)
-				timerCount = 0;
+				Player::playerTimer = 0;
 			player->dir = UP;
 		}
 		player->nextDir = UP;
 	}else if(event->key() == Qt::Key_Down){
 		if(player->canMoveDown()){
 			if(player->dir != DOWN)
-				timerCount = 0;
+				Player::playerTimer = 0;
 			player->dir = DOWN;
 		}
 		player->nextDir = DOWN;
@@ -291,33 +262,21 @@ void GameBoard::eatingSnacks(){
 			break; 
 		}
 	}
-	
-	
-	
-	
 }
 
 
-
 void GameBoard::checkIfPlayerWon(){
-		bool isEverySnackEaten = true;
+	bool isEverySnackEaten = true;
 	for(int i=0; i<snacks.size(); i++){
 		if(snacks[i]->isVisible){
 			isEverySnackEaten = false;
 		}
-		
 	}
 	if(isEverySnackEaten){
-		//std::cout << "winn" <<std::endl;
 		win = true;
 		dead = true;
 		timer->stop();
-		//init();
 	}
-	
-	
-	
-	
 }
 
 
@@ -350,20 +309,26 @@ void GameBoard::checkContactPlayerWithGhost(){
 
 
 void GameBoard::movingOfFigures(){
-	timerCount++; 
-	ghostTimer++;
+	Player::playerTimer++; 
+	Ghost::ghostTimer++;
 	Ghost::selectMode();
-	//std::cout << "timerCount = " << timerCount << std::endl;
 	player->move();
-	if(!(Ghost::mode == FRIGHTENED && ghostTimer%HOW_TIMES_LOWER_SPEED_OF_FRIGHTENED_GHOSTS==0)){
+	if(!(Ghost::mode == FRIGHTENED && Ghost::ghostTimer % HOW_TIMES_LOWER_SPEED_OF_FRIGHTENED_GHOSTS == 0)){
 		blinky ->move(*player);
 		inky->move(*player, *blinky);
 		clyde ->move(*player);
 		pinky->move(*player);
 	}
-	
-	
-	
+}
+
+
+int GameBoard::sizeOfWalls(){
+	return walls.size();
+}
+
+
+Wall * GameBoard::getWall(int i){
+	return walls[i];
 }
 
 
@@ -371,14 +336,10 @@ void GameBoard::movingOfFigures(){
 
 
 void GameBoard::move(){
-	//std::cout << "move Pacman " << std::endl;
 	movingOfFigures();
-	
 	eatingSnacks();
 	checkIfPlayerWon();
 	checkContactPlayerWithGhost();
-	
-	
 	update(); 
 }
 
@@ -387,7 +348,6 @@ void GameBoard::newGame(){
 	init();
 	for(int i=0; i< snacks.size(); i++){
 		snacks[i]->isVisible = true;
-		
 	}
 	score->setNum(INITIAL_SCORE);
 	lives->setNum(INITIAL_LIVES);

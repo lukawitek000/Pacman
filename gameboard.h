@@ -29,8 +29,6 @@
 #include "Inky.h"
 #include "Clyde.h" 
 #include "Pinky.h"
-//class GameBoard;
-
 
 
 class GameBoard : public QWidget{ 
@@ -39,103 +37,56 @@ class GameBoard : public QWidget{
 	
 private: 
 	
-	
 	void readTheBoard();
 	void createButtons();
 	void createLCDDisplays();
 	void createLayout();
 	void createBackground();
-	
 	void eatingSnacks();
 	void checkIfPlayerWon();
-	
-	
 	void paintText(QPainter &painter);
-	
 	void getDirectionForPlayer(QKeyEvent *event);
 	void checkContactPlayerWithGhost();
 	void movingOfFigures();
+	void init();
+	void paintEvent(QPaintEvent* /*event*/);
+	void keyPressEvent(QKeyEvent *event);
 	
 	Blinky *blinky;
 	Inky *inky;
 	Clyde *clyde;
 	Pinky *pinky;
-	
 	Player *player; 
-	
-	
-	QPoint playerInit;
-	QPoint blinkyInit;
-	QPoint inkyInit;
-	QPoint pinkyInit;
-	QPoint clydeInit;
-	
-	
-	
 	
 	QVector<Snack*> snacks;
 	static QVector<Wall*> walls; 
-	
-	
-	
-	
-	Gate *gate;
-	
-	
-	
 	bool gameOver;
 	bool win;
 	bool dead;
-	
-	
-	
 	QTimer *timer;
-	
-	int speed = 9 	;
-	
 	LCDScore * score;  
 	LCDScore * lives;
-	
 	QImage board;
 	QGridLayout *gridLayout;
 	QGridLayout *layout;
 	QGridLayout *buttonLayout;
-	
-	void init();
-	 
-private slots:
-	void move(); 
-	void newGame();  
-	
-	 
+ 
 	
 public: 
 	const static int sizeOfTile = 30; 
 	const static int heightOfLCD = 140;
-	//static int h;
-	static int timerCount; 
-	static int ghostTimer;
-	
-	
+	const static int speed = 9;
 	GameBoard(QWidget *parent  = 0);
 	
-	static int sizeOfWalls(){
-		return walls.size();
-	}
-	static Wall * getWall(int i){
-		return walls[i];
-	}
-	
-protected:  
-	
-	void paintEvent(QPaintEvent* /*event*/);
-	void keyPressEvent(QKeyEvent *event);
+	static int sizeOfWalls();
+	static Wall * getWall(int i);
 
-	
+private slots:
+	void move(); 
+	void newGame();  
+
 signals:
 	void timeout();
 	void collect(int);
 	void die();
-	
-	
 };
