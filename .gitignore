@@ -6,3 +6,5 @@
 moc_*
 *.pro
 *.pro.user
+*.qmake.stash
+
