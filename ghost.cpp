@@ -197,7 +197,9 @@ void Ghost::setScatterAim(int x, int y){
 void Ghost::moveCaughtGhostToHouse(){
 	srand(time(NULL));
 	position.setX(rand()% (HOUSE_RIGHT_WALL-HOUSE_LEFT_WALL) + HOUSE_LEFT_WALL);
+	//position.setX(300);
 	position.setY(HOUSE_Y);
+	dir = RIGHT;
 	FigureRect.moveTo(position);
 };
 
