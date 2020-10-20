@@ -1,5 +1,9 @@
 # Pacman
-Compilation
+
+
+
+
+##Compilation
 
 qmake -project
 qmake QT+=widgets
